@@ -27,7 +27,6 @@
 
         <activity android:name=".IntroduceAppActivity" android:exported="true"/>
         <activity android:name=".FoodNutritionInfoActivity" android:exported="true"/>
-
     </application>
 
 </manifest>
