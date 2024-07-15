@@ -12,12 +12,20 @@ public class Constants {
     public static final int MAX_ACTIVITY_LEVEL = 5;
 
     public static final Map<Integer, Double> ACTIVITY_LEVEL_TO_FACTOR = new HashMap<>();
+    public static final Map<Integer, String> ACTIVITY_LEVEL_DESCRIPTIONS = new HashMap<>();
+
     static {
         ACTIVITY_LEVEL_TO_FACTOR.put(1, 1.2);
         ACTIVITY_LEVEL_TO_FACTOR.put(2, 1.375);
         ACTIVITY_LEVEL_TO_FACTOR.put(3, 1.55);
         ACTIVITY_LEVEL_TO_FACTOR.put(4, 1.725);
         ACTIVITY_LEVEL_TO_FACTOR.put(5, 1.9);
+
+        ACTIVITY_LEVEL_DESCRIPTIONS.put(1, "Sedentary (Little to no exercise)");
+        ACTIVITY_LEVEL_DESCRIPTIONS.put(2, "Light exercise (1-3 days per week)");
+        ACTIVITY_LEVEL_DESCRIPTIONS.put(3, "Moderate exercise (3-5 days per week)");
+        ACTIVITY_LEVEL_DESCRIPTIONS.put(4, "Heavy exercise (6-7 days per week)");
+        ACTIVITY_LEVEL_DESCRIPTIONS.put(5, "Very heavy exercise (twice per day, extra heavy workouts)");
     }
 
     // Constants for weight goals
