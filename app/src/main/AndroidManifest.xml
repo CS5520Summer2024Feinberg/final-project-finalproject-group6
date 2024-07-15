@@ -33,6 +33,9 @@
         <activity
             android:name=".FoodNutritionInfoActivity"
             android:exported="true" />
+        <activity
+            android:name=".HealthInfoActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
