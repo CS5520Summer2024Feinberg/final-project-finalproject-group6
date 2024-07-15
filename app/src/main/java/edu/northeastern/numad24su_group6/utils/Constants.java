@@ -19,4 +19,8 @@ public class Constants {
         ACTIVITY_LEVEL_TO_FACTOR.put(4, 1.725);
         ACTIVITY_LEVEL_TO_FACTOR.put(5, 1.9);
     }
+
+    // Constants for weight goals
+    public static final double EIGHTY_FIVE = 0.85;
+    public static final double ONE_FIFTEEN = 1.15;
 }

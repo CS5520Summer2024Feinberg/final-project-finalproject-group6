@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class HealthInfoActivity extends AppCompatActivity {
     private EditText activityLevelEditText;
     private RadioButton maleRadioButton;
     private RadioButton femaleRadioButton;
+    private Spinner goalSpinner;
     private TextView resultTextView;
     private Button calculateButton;
 
@@ -33,6 +35,7 @@ public class HealthInfoActivity extends AppCompatActivity {
         activityLevelEditText = findViewById(R.id.activityLevelEditText);
         maleRadioButton = findViewById(R.id.maleRadioButton);
         femaleRadioButton = findViewById(R.id.femaleRadioButton);
+        goalSpinner = findViewById(R.id.goalSpinner);
         resultTextView = findViewById(R.id.resultTextView);
         calculateButton = findViewById(R.id.calculateButton);
 
@@ -51,11 +54,14 @@ public class HealthInfoActivity extends AppCompatActivity {
             double weight = Double.parseDouble(weightEditText.getText().toString());
             int activityLevel = Integer.parseInt(activityLevelEditText.getText().toString());
             String sex = maleRadioButton.isChecked() ? "Male" : "Female";
+            String goal = goalSpinner.getSelectedItem().toString();
 
             User user = new User(age, sex, height, weight, activityLevel);
             user.calculateBasalMetabolicRate();
             user.calculateDailyCalorieNeeds();
-            resultTextView.setText(user.toString());
+            double caloriesGoal = user.calculateCaloriesGoal(goal);
+
+            resultTextView.setText("Your estimated daily calorie needs are " + Math.round(caloriesGoal) + " calories!");
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Please enter valid numbers", Toast.LENGTH_SHORT).show();
         } catch (IllegalArgumentException e) {

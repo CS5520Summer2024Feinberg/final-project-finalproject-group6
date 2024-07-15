@@ -44,6 +44,24 @@ public class User {
         dailyCalorieNeeds = basalMetabolicRate * activityFactor;
     }
 
+    public double calculateCaloriesGoal(String goal) {
+        if (dailyCalorieNeeds <= 0) throw new IllegalArgumentException("Daily calorie needs should be a positive value");
+        if (goal == null || (!goal.equals("To maintain weight") && !goal.equals("To lose weight") && !goal.equals("To gain weight"))) {
+            throw new IllegalArgumentException("Invalid goal. Choose from 'maintain', 'lose', or 'gain'.");
+        }
+
+        switch (goal) {
+            case "To maintain weight":
+                return dailyCalorieNeeds;
+            case "To lose weight":
+                return dailyCalorieNeeds * Constants.EIGHTY_FIVE;
+            case "To gain weight":
+                return dailyCalorieNeeds * Constants.ONE_FIFTEEN;
+            default:
+                throw new IllegalArgumentException("Invalid goal. Choose from 'maintain', 'lose', or 'gain'.");
+        }
+    }
+
     @Override
     public String toString() {
         if (dailyCalorieNeeds > 0) {
