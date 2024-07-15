@@ -15,18 +15,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD24Su_Group6"
         tools:targetApi="31">
-
+        <activity
+            android:name=".CalculateCaloriesActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".IntroduceAppActivity" android:exported="true"/>
-        <activity android:name=".FoodNutritionInfoActivity" android:exported="true"/>
+        <activity
+            android:name=".IntroduceAppActivity"
+            android:exported="true" />
+        <activity
+            android:name=".FoodNutritionInfoActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
