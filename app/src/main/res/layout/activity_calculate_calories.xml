@@ -126,7 +126,8 @@
             android:id="@+id/calorieProgressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="50"/>
+            android:progress="50"
+            style="?android:attr/progressBarStyleHorizontal"/>
     </LinearLayout>
 
     <!-- Nutrition Info Layout -->
@@ -257,6 +258,11 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
+<!--                <ProgressBar-->
+<!--                    android:layout_width="60dp"-->
+<!--                    android:layout_height="60dp"-->
+<!--                    style="?android:attr/progressBarStyleHorizontal"-->
+<!--                    android:progress="65"/>-->
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
