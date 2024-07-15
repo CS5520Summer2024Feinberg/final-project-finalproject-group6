@@ -10,6 +10,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnIntroduceApp;
     private Button btnFoodNutritionInfo;
     private Button btnCalculateCalories;
+    private Button btnHealthInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         btnIntroduceApp = findViewById(R.id.btnIntroduceApp);
         btnFoodNutritionInfo = findViewById(R.id.btnFoodNutritionInfo);
         btnCalculateCalories = findViewById(R.id.btnCalculateCalories);
+        btnHealthInfo = findViewById(R.id.btnHealthInfo);
 
         btnIntroduceApp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,5 +45,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btnHealthInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HealthInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }
