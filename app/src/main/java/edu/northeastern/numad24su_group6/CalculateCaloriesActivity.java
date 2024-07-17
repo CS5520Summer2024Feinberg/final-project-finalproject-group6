@@ -1,6 +1,9 @@
 package edu.northeastern.numad24su_group6;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +27,7 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     private TextView fatValueText;
     private TextView proteinValueText;
     private TextView waterValueText;
+    private Button addFoodButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         fatValueText = findViewById(R.id.fatValue);
         proteinValueText = findViewById(R.id.proteinValue);
         waterValueText = findViewById(R.id.waterValue);
+
+        // Initialize Button
+        addFoodButton = findViewById(R.id.btnAddFood);
 
         // Set goals and current consumption
         float caloriesGoal = 2000f;
@@ -60,6 +67,15 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal);
         setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal);
         setupPieChart(waterPieChart, waterValueText, currentWater, waterGoal);
+
+        // Set OnClickListener for the Add Food Button
+        addFoodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CalculateCaloriesActivity.this, FoodNutritionInfoActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setupPieChart(PieChart pieChart, TextView textView, float currentValue, float goalValue) {

@@ -10,6 +10,10 @@ public class User {
     private int activityLevel;
     private double basalMetabolicRate;
     private double dailyCalorieNeeds;
+    private double carbs;
+    private double proteins;
+    private double fats;
+    private double water;
 
     public User(int age, String sex, double height, double weight, int activityLevel) {
         if (age <= 0 || age > Constants.MAX_AGE) throw new IllegalArgumentException("Invalid age");
@@ -25,6 +29,10 @@ public class User {
         this.activityLevel = activityLevel;
         this.basalMetabolicRate = Constants.MINUS_ONE;
         this.dailyCalorieNeeds = Constants.MINUS_ONE;
+        this.carbs = Constants.MINUS_ONE;
+        this.proteins = Constants.MINUS_ONE;
+        this.fats = Constants.MINUS_ONE;
+        this.water = Constants.MINUS_ONE;
     }
 
     public void calculateBasalMetabolicRate() {
@@ -60,6 +68,31 @@ public class User {
             default:
                 throw new IllegalArgumentException("Invalid goal. Choose from 'maintain', 'lose', or 'gain'.");
         }
+    }
+
+    public void calculateMacronutrients() {
+        if (dailyCalorieNeeds <= 0) throw new IllegalArgumentException("Daily calorie needs should be a positive value");
+
+        this.carbs = dailyCalorieNeeds * 0.5 / 4; // 50% of calories from carbs, 4 calories per gram
+        this.proteins = dailyCalorieNeeds * 0.2 / 4; // 20% of calories from proteins, 4 calories per gram
+        this.fats = dailyCalorieNeeds * 0.3 / 9; // 30% of calories from fats, 9 calories per gram
+        this.water = weight * 35; // 35 ml per kg of body weight
+    }
+
+    public double getCarbs() {
+        return carbs;
+    }
+
+    public double getProteins() {
+        return proteins;
+    }
+
+    public double getFats() {
+        return fats;
+    }
+
+    public double getWater() {
+        return water;
     }
 
     @Override
