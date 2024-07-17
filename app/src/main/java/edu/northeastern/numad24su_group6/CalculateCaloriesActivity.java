@@ -1,6 +1,7 @@
 package edu.northeastern.numad24su_group6;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +20,10 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     private PieChart fatPieChart;
     private PieChart proteinPieChart;
     private PieChart waterPieChart;
+    private TextView caloriesValueText;
+    private TextView fatValueText;
+    private TextView proteinValueText;
+    private TextView waterValueText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,12 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         fatPieChart = findViewById(R.id.fatPieChart);
         proteinPieChart = findViewById(R.id.proteinPieChart);
         waterPieChart = findViewById(R.id.waterPieChart);
+
+        // Initialize TextViews
+        caloriesValueText = findViewById(R.id.caloriesValue);
+        fatValueText = findViewById(R.id.fatValue);
+        proteinValueText = findViewById(R.id.proteinValue);
+        waterValueText = findViewById(R.id.waterValue);
 
         // Set goals and current consumption
         float caloriesGoal = 2000f;
@@ -45,13 +56,13 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         float currentWater = 2000f; // in ml
 
         // Set up PieCharts with goals and current consumption
-        setupPieChart(caloriesPieChart, currentCalories, caloriesGoal);
-        setupPieChart(fatPieChart, currentFat, fatGoal);
-        setupPieChart(proteinPieChart, currentProtein, proteinGoal);
-        setupPieChart(waterPieChart, currentWater, waterGoal);
+        setupPieChart(caloriesPieChart, caloriesValueText, currentCalories, caloriesGoal);
+        setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal);
+        setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal);
+        setupPieChart(waterPieChart, waterValueText, currentWater, waterGoal);
     }
 
-    private void setupPieChart(PieChart pieChart, float currentValue, float goalValue) {
+    private void setupPieChart(PieChart pieChart, TextView textView, float currentValue, float goalValue) {
         List<PieEntry> entries = new ArrayList<>();
         float percentage = (currentValue / goalValue) * 100;
         entries.add(new PieEntry(percentage));
@@ -72,5 +83,8 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         pieChart.getLegend().setEnabled(false);
 
         pieChart.invalidate(); // refresh
+
+        // Set the TextView to show "consumed / total"
+        textView.setText(String.format("%s / %s", currentValue, goalValue));
     }
 }
