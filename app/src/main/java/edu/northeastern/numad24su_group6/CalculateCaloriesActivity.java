@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,14 +20,16 @@ import java.util.List;
 
 public class CalculateCaloriesActivity extends AppCompatActivity {
 
-    private PieChart caloriesPieChart;
+    private PieChart carbsPieChart;
     private PieChart fatPieChart;
     private PieChart proteinPieChart;
     private PieChart waterPieChart;
-    private TextView caloriesValueText;
+    private TextView carbsValueText;
     private TextView fatValueText;
     private TextView proteinValueText;
     private TextView waterValueText;
+    private TextView caloriesValueText;
+    private ProgressBar calorieProgressBar;
     private Button addFoodButton;
 
     @Override
@@ -35,23 +38,27 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calculate_calories);
 
         // Initialize PieCharts
-        caloriesPieChart = findViewById(R.id.caloriesPieChart);
+        carbsPieChart = findViewById(R.id.carbsPieChart);
         fatPieChart = findViewById(R.id.fatPieChart);
         proteinPieChart = findViewById(R.id.proteinPieChart);
         waterPieChart = findViewById(R.id.waterPieChart);
 
         // Initialize TextViews
-        caloriesValueText = findViewById(R.id.caloriesValue);
+        carbsValueText = findViewById(R.id.carbsValue);
         fatValueText = findViewById(R.id.fatValue);
         proteinValueText = findViewById(R.id.proteinValue);
         waterValueText = findViewById(R.id.waterValue);
+        caloriesValueText = findViewById(R.id.caloriesValue);
+
+        // Initialize ProgressBar
+        calorieProgressBar = findViewById(R.id.calorieProgressBar);
 
         // Initialize Button
         addFoodButton = findViewById(R.id.btnAddFood);
 
         // Set goals and current consumption
-        float caloriesGoal = 2000f;
-        float currentCalories = 1500f;
+        float carbsGoal = 200f;
+        float currentCarbs = 150f;
 
         float fatGoal = 70f;
         float currentFat = 50f;
@@ -62,11 +69,17 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         float waterGoal = 3000f; // in ml
         float currentWater = 2000f; // in ml
 
+        float caloriesGoal = 2000f;
+        float currentCalories = 1500f;
+
         // Set up PieCharts with goals and current consumption
-        setupPieChart(caloriesPieChart, caloriesValueText, currentCalories, caloriesGoal);
+        setupPieChart(carbsPieChart, carbsValueText, currentCarbs, carbsGoal);
         setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal);
         setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal);
         setupPieChart(waterPieChart, waterValueText, currentWater, waterGoal);
+
+        // Update ProgressBar and TextView for calories
+        setupCalorieProgressBar(calorieProgressBar, caloriesValueText, currentCalories, caloriesGoal);
 
         // Set OnClickListener for the Add Food Button
         addFoodButton.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +99,7 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
 
         PieDataSet dataSet = new PieDataSet(entries, "");
         List<Integer> colors = new ArrayList<>();
-        colors.add(ColorTemplate.COLORFUL_COLORS[0]); // Consumed part color
+        colors.add(ColorTemplate.COLORFUL_COLORS[3]); // Consumed part color
         colors.add(android.graphics.Color.WHITE); // Remaining part color
         dataSet.setColors(colors);
         dataSet.setDrawValues(false); // Disable slice labels
@@ -101,6 +114,12 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         pieChart.invalidate(); // refresh
 
         // Set the TextView to show "consumed / total"
+        textView.setText(String.format("%s / %s", currentValue, goalValue));
+    }
+
+    private void setupCalorieProgressBar(ProgressBar progressBar, TextView textView, float currentValue, float goalValue) {
+        int progress = (int) ((currentValue / goalValue) * 100);
+        progressBar.setProgress(progress);
         textView.setText(String.format("%s / %s", currentValue, goalValue));
     }
 }
