@@ -36,6 +36,9 @@
         <activity
             android:name=".HealthInfoActivity"
             android:exported="true" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".CreateUserActivity" />
+
     </application>
 
 </manifest>
