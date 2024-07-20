@@ -35,6 +35,7 @@ public class CreateUserActivity extends AppCompatActivity {
         createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String username = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
                 String email = emailInput.getText().toString();

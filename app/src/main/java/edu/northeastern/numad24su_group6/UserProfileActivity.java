@@ -17,6 +17,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+
         username = findViewById(R.id.username);
         email = findViewById(R.id.email);
         age = findViewById(R.id.age);
