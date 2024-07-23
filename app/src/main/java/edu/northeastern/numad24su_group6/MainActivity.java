@@ -23,8 +23,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);
+
+        if (!isLoggedIn) {
+            // Redirect to LoginActivity if not logged in
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Finish MainActivity to prevent going back to it
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
+        // Initialize buttons and other UI elements
         btnIntroduceApp = findViewById(R.id.btnIntroduceApp);
         btnFoodNutritionInfo = findViewById(R.id.btnFoodNutritionInfo);
         btnCalculateCalories = findViewById(R.id.btnCalculateCalories);
@@ -32,14 +45,9 @@ public class MainActivity extends AppCompatActivity {
         btnUserLogin = findViewById(R.id.btnUserLogin);
         userInfo = findViewById(R.id.user_info);
 
-        sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-
-        // Get the username passed during login and display it
-        Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
-        if (username != null) {
-            userInfo.setText(username);
-        }
+        // Get the stored username and display it
+        String username = sharedPreferences.getString("username", "user");
+        userInfo.setText(username);
 
         userInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +129,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("is_logged_in", false);
+        editor.apply();
+
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

@@ -39,6 +39,11 @@ public class LoginActivity extends AppCompatActivity {
                 String storedPassword = sharedPreferences.getString("password", "");
 
                 if (storedPassword.equals(password)) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("is_logged_in", true);
+                    editor.putString("username", username);
+                    editor.apply();
+
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("username", username);
                     startActivity(intent);

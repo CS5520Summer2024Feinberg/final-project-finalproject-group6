@@ -35,7 +35,6 @@ public class CreateUserActivity extends AppCompatActivity {
         createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String username = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
                 String email = emailInput.getText().toString();
@@ -50,6 +49,7 @@ public class CreateUserActivity extends AppCompatActivity {
                     editor.putString("email", email);
                     editor.putString("age", age);
                     editor.putString("gender", gender);
+                    editor.putBoolean("is_logged_in", true);
                     editor.apply();
 
                     Toast.makeText(CreateUserActivity.this, "User created successfully", Toast.LENGTH_LONG).show();
@@ -67,7 +67,7 @@ public class CreateUserActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateUserActivity.this, MainActivity.class);
+                Intent intent = new Intent(CreateUserActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
