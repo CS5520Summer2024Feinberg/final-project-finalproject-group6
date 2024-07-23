@@ -106,7 +106,7 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
         tvFatsValue.setText(String.format("%.1fg", fats));
         tvProteinsValue.setText(String.format("%.1fg", proteins));
         tvFibersValue.setText(String.format("%.1fg", fibers));
-        tvCaloriesValue.setText(String.format("%.1f kcal", calories));
+        tvCaloriesValue.setText(String.format("%.1f Cal", calories));
 
         progressBarCarbs.setProgress((int) (carbs / user.getCarbs() * 100));
         progressBarFats.setProgress((int) (fats / user.getFats() * 100));
