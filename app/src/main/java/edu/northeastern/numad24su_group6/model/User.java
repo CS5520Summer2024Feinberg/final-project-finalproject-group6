@@ -95,6 +95,10 @@ public class User {
         return water;
     }
 
+    public double getCalories() {
+        return dailyCalorieNeeds;
+    }
+
     @Override
     public String toString() {
         if (dailyCalorieNeeds > 0) {

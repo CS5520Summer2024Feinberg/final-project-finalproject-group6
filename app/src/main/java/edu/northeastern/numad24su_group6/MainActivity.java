@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         btnFoodNutritionInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, FoodNutritionInfoActivity.class);
+                Intent intent = new Intent(MainActivity.this, SearchFoodActivity.class);
                 startActivity(intent);
             }
         });

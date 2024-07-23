@@ -1,13 +1,13 @@
 package edu.northeastern.numad24su_group6;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,64 +26,78 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.northeastern.numad24su_group6.model.User;
+
 public class FoodNutritionInfoActivity extends AppCompatActivity {
 
-    private EditText etFoodName;
-    private Button btnSearch, btnBack;
-    private TextView tvFoodName, tvNutritionInfo, tvError, tvPrompt;
+    private TextView tvFoodName, tvError, tvPrompt, tvCarbsValue, tvFatsValue, tvProteinsValue, tvFibersValue, tvCaloriesValue;
     private ImageView ivFoodImage;
-    private Spinner spinnerFoodList;
+    private SeekBar seekBarAmount;
+    private ProgressBar progressBarCarbs, progressBarFats, progressBarProteins, progressBarFibers, progressBarCalories;
+    private Button btnAddFood, btnBack;
+
+    private User user;
+    private double foodCarbs, foodFats, foodProteins, foodFibers, foodCalories;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_nutrition_info);
 
-        etFoodName = findViewById(R.id.etFoodName);
-        btnSearch = findViewById(R.id.btnSearch);
-        btnBack = findViewById(R.id.btnBack);
         tvFoodName = findViewById(R.id.tvFoodName);
-        tvNutritionInfo = findViewById(R.id.tvNutritionInfo);
-        tvError = findViewById(R.id.tvError);
-        ivFoodImage = findViewById(R.id.ivFoodImage);
-        spinnerFoodList = findViewById(R.id.spinnerFoodList);
+        // tvError = findViewById(R.id.tvError);
         tvPrompt = findViewById(R.id.tvPrompt);
+        ivFoodImage = findViewById(R.id.ivFoodImage);
+        seekBarAmount = findViewById(R.id.seekBarAmount);
+        btnAddFood = findViewById(R.id.btnAddFood);
+        btnBack = findViewById(R.id.btnBack);
 
-        // Initialize Spinner with food items
-        String[] foodItems = {"Select a food", "egg", "coffee", "chicken", "beef", "pizza", "bread", "milk"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, foodItems);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFoodList.setAdapter(adapter);
+        progressBarCarbs = findViewById(R.id.progressBarCarbs);
+        progressBarFats = findViewById(R.id.progressBarFats);
+        progressBarProteins = findViewById(R.id.progressBarProteins);
+        progressBarFibers = findViewById(R.id.progressBarFibers);
+        progressBarCalories = findViewById(R.id.progressBarCalories);
+        tvCarbsValue = findViewById(R.id.tvCarbsValue);
+        tvFatsValue = findViewById(R.id.tvFatsValue);
+        tvProteinsValue = findViewById(R.id.tvProteinsValue);
+        tvFibersValue = findViewById(R.id.tvFibersValue);
+        tvCaloriesValue = findViewById(R.id.tvCaloriesValue);
 
-        spinnerFoodList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        user = getUser(); // Fetch user details from the intent or database
+
+        Intent intent = getIntent();
+        String foodName = intent.getStringExtra("foodName");
+        if (foodName != null) {
+            searchFoodInfo(foodName);
+        }
+
+        btnBack.setOnClickListener(v -> finish());
+
+        seekBarAmount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    etFoodName.setText(parent.getItemAtPosition(position).toString());
-                }
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                updateNutritionValues(progress);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
                 // Do nothing
             }
         });
 
-        btnSearch.setOnClickListener(v -> {
-            String foodName = etFoodName.getText().toString();
-            if (!foodName.isEmpty()) {
-                searchFoodInfo(foodName);
-            } else {
-                Toast.makeText(this, "Please enter a food name or select one from the list.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
-
         if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
         }
+    }
+
+    private User getUser() {
+        // Retrieve user data (for now, create a dummy user)
+        return new User(25, "Male", 175, 70, 3);
     }
 
     private void searchFoodInfo(String foodName) {
@@ -102,26 +116,15 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
                                 JSONObject food = hints.getJSONObject(0).getJSONObject("food");
                                 String label = food.getString("label");
                                 JSONObject nutrients = food.getJSONObject("nutrients");
-                                double calories = nutrients.optDouble("ENERC_KCAL", 0);
-                                double carbs = nutrients.optDouble("CHOCDF", 0);
-                                double fats = nutrients.optDouble("FAT", 0);
-                                double proteins = nutrients.optDouble("PROCNT", 0);
-                                double fibers = nutrients.optDouble("FIBTG", 0);
-                                double sugars = nutrients.optDouble("SUGAR", 0);
+                                foodCalories = nutrients.optDouble("ENERC_KCAL", 0);
+                                foodCarbs = nutrients.optDouble("CHOCDF", 0);
+                                foodFats = nutrients.optDouble("FAT", 0);
+                                foodProteins = nutrients.optDouble("PROCNT", 0);
+                                foodFibers = nutrients.optDouble("FIBTG", 0);
                                 String imageUrl = food.optString("image", "");
 
                                 // Update UI
                                 tvFoodName.setText(label);
-                                tvNutritionInfo.setText("Calories: " + calories + "kcal\n" +
-                                        "Carbs: " + carbs + "g\n" +
-                                        "Fats: " + fats + "g\n" +
-                                        "Proteins: " + proteins + "g\n" +
-                                        "Fibers: " + fibers + "g\n" +
-                                        "Sugars: " + sugars + "g");
-                                tvFoodName.setVisibility(View.VISIBLE);
-                                tvNutritionInfo.setVisibility(View.VISIBLE);
-                                tvError.setVisibility(View.GONE);
-
                                 if (!imageUrl.isEmpty()) {
                                     Glide.with(FoodNutritionInfoActivity.this).load(imageUrl).into(ivFoodImage);
                                     ivFoodImage.setVisibility(View.VISIBLE);
@@ -129,6 +132,9 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
                                 } else {
                                     ivFoodImage.setVisibility(View.GONE);
                                 }
+
+                                updateNutritionValues(seekBarAmount.getProgress());
+
                             } else {
                                 showError("No nutrition information found.");
                             }
@@ -148,48 +154,62 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    private void updateNutritionValues(int amount) {
+        double factor = amount / 100.0;
+        double carbs = foodCarbs * factor;
+        double fats = foodFats * factor;
+        double proteins = foodProteins * factor;
+        double fibers = foodFibers * factor;
+        double calories = foodCalories * factor;
+
+        tvCarbsValue.setText(String.format("%.1fg", carbs));
+        tvFatsValue.setText(String.format("%.1fg", fats));
+        tvProteinsValue.setText(String.format("%.1fg", proteins));
+        tvFibersValue.setText(String.format("%.1fg", fibers));
+        tvCaloriesValue.setText(String.format("%.1f kcal", calories));
+
+        progressBarCarbs.setProgress((int) (carbs / user.getCarbs() * 100));
+        progressBarFats.setProgress((int) (fats / user.getFats() * 100));
+        progressBarProteins.setProgress((int) (proteins / user.getProteins() * 100));
+        progressBarFibers.setProgress((int) (fibers / user.getWater() * 100));
+        progressBarCalories.setProgress((int) (calories / user.getCalories() * 100));
+    }
+
     private void showError(String message) {
-        tvError.setText(message);
-        tvError.setVisibility(View.VISIBLE);
-        tvFoodName.setVisibility(View.GONE);
-        tvNutritionInfo.setVisibility(View.GONE);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         ivFoodImage.setVisibility(View.GONE);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("foodName", etFoodName.getText().toString());
-        outState.putString("foodLabel", tvFoodName.getText().toString());
-        outState.putString("nutritionInfo", tvNutritionInfo.getText().toString());
+        outState.putString("foodName", tvFoodName.getText().toString());
         outState.putString("imageUrl", ivFoodImage.getTag() != null ? ivFoodImage.getTag().toString() : "");
-        outState.putBoolean("imageVisible", ivFoodImage.getVisibility() == View.VISIBLE);
-        outState.putBoolean("infoVisible", tvFoodName.getVisibility() == View.VISIBLE);
+        outState.putInt("seekBarAmount", seekBarAmount.getProgress());
+        outState.putDouble("storedCarbs", foodCarbs);
+        outState.putDouble("storedFats", foodFats);
+        outState.putDouble("storedProteins", foodProteins);
+        outState.putDouble("storedFibers", foodFibers);
+        outState.putDouble("storedCalories", foodCalories);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            String foodName = savedInstanceState.getString("foodName");
-            String foodLabel = savedInstanceState.getString("foodLabel");
-            String nutritionInfo = savedInstanceState.getString("nutritionInfo");
-            String imageUrl = savedInstanceState.getString("imageUrl");
-            boolean imageVisible = savedInstanceState.getBoolean("imageVisible");
-            boolean infoVisible = savedInstanceState.getBoolean("infoVisible");
+            tvFoodName.setText(savedInstanceState.getString("foodName"));
+            if (savedInstanceState.getString("imageUrl") != null) {
+                Glide.with(this).load(savedInstanceState.getString("imageUrl")).into(ivFoodImage);
+                ivFoodImage.setTag(savedInstanceState.getString("imageUrl"));
+            }
+            seekBarAmount.setProgress(savedInstanceState.getInt("seekBarAmount"));
+            foodCarbs = savedInstanceState.getDouble("storedCarbs");
+            foodFats = savedInstanceState.getDouble("storedFats");
+            foodProteins = savedInstanceState.getDouble("storedProteins");
+            foodFibers = savedInstanceState.getDouble("storedFibers");
+            foodCalories = savedInstanceState.getDouble("storedCalories");
 
-            etFoodName.setText(foodName);
-            tvFoodName.setText(foodLabel);
-            tvNutritionInfo.setText(nutritionInfo);
-            if (infoVisible) {
-                tvFoodName.setVisibility(View.VISIBLE);
-                tvNutritionInfo.setVisibility(View.VISIBLE);
-            }
-            if (imageVisible && !imageUrl.isEmpty()) {
-                Glide.with(this).load(imageUrl).into(ivFoodImage);
-                ivFoodImage.setVisibility(View.VISIBLE);
-                ivFoodImage.setTag(imageUrl);
-            }
+            updateNutritionValues(seekBarAmount.getProgress());
         }
     }
 }
