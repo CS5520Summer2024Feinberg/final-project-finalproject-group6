@@ -1,8 +1,8 @@
 package edu.northeastern.numad24su_group6;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +13,9 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import edu.northeastern.numad24su_group6.model.User;
 
@@ -103,11 +106,25 @@ public class HealthInfoActivity extends AppCompatActivity {
             fatsTextView.setText("Fats: " + Math.round(user.getFats()) + " g");
             waterTextView.setText("Water: " + Math.round(user.getWater()) + " ml");
 
+            // Save user data to SharedPreferences
+            saveUserToSharedPreferences(user);
+
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Please enter valid numbers", Toast.LENGTH_SHORT).show();
         } catch (IllegalArgumentException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void saveUserToSharedPreferences(User user) {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("age", user.getAge());
+        editor.putString("sex", user.getSex());
+        editor.putFloat("height", (float) user.getHeight());
+        editor.putFloat("weight", (float) user.getWeight());
+        editor.putInt("activityLevel", user.getActivityLevel());
+        editor.apply();
     }
 
     @Override

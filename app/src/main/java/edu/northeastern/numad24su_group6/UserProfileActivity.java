@@ -17,7 +17,6 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-
         username = findViewById(R.id.username);
         email = findViewById(R.id.email);
         age = findViewById(R.id.age);
@@ -26,7 +25,7 @@ public class UserProfileActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         String storedUsername = sharedPreferences.getString("username", "");
         String storedEmail = sharedPreferences.getString("email", "");
-        String storedAge = sharedPreferences.getString("age", "");
+        int storedAge = sharedPreferences.getInt("age", 0);
         String storedGender = sharedPreferences.getString("gender", "");
 
         username.setText("Username: " + storedUsername);

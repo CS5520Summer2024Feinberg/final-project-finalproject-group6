@@ -47,7 +47,7 @@ public class CreateUserActivity extends AppCompatActivity {
                     editor.putString("username", username);
                     editor.putString("password", password);
                     editor.putString("email", email);
-                    editor.putString("age", age);
+                    editor.putInt("age", Integer.parseInt(age));
                     editor.putString("gender", gender);
                     editor.putBoolean("is_logged_in", true);
                     editor.apply();

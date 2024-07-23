@@ -99,6 +99,26 @@ public class User {
         return dailyCalorieNeeds;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public int getActivityLevel() {
+        return activityLevel;
+    }
+
     @Override
     public String toString() {
         if (dailyCalorieNeeds > 0) {
