@@ -22,6 +22,13 @@ public class UserProfileActivity extends AppCompatActivity {
         age = findViewById(R.id.age);
         gender = findViewById(R.id.gender);
 
+        // Retrieve the username from the intent or SharedPreferences
+        String currentUsername = getIntent().getStringExtra("username");
+        if (currentUsername == null) {
+            SharedPreferences defaultPrefs = getSharedPreferences("default", Context.MODE_PRIVATE);
+            currentUsername = defaultPrefs.getString("username", "");
+        }
+
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         String storedUsername = sharedPreferences.getString("username", "");
         String storedEmail = sharedPreferences.getString("email", "");
