@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Update the menu with user information
         String email = sharedPreferences.getString("email", "Email not found");
-        String age = sharedPreferences.getString("age", "Age not found");
+        int age = sharedPreferences.getInt("age", 0);
         String gender = sharedPreferences.getString("gender", "Gender not found");
 
         MenuItem emailItem = popupMenu.getMenu().findItem(R.id.menu_email);
