@@ -9,7 +9,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnIntroduceApp;
@@ -18,24 +26,28 @@ public class MainActivity extends AppCompatActivity {
     private Button btnHealthInfo;
     private Button btnUserLogin;
     private TextView userInfo;
-    private SharedPreferences sharedPreferences;
+    private DatabaseReference userRef;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);
+        setContentView(R.layout.activity_main);
 
-        if (!isLoggedIn) {
-            // Redirect to LoginActivity if not logged in
+        userId = getIntent().getStringExtra("userId");
+
+        // Check if userId is null or empty
+        if (userId == null || userId.isEmpty()) {
+            Toast.makeText(this, "User information not found. Please log in again.", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
-            finish(); // Finish MainActivity to prevent going back to it
+            finish();
             return;
         }
 
-        setContentView(R.layout.activity_main);
+        // Initialize Firebase Database reference
+        userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
         // Initialize buttons and other UI elements
         btnIntroduceApp = findViewById(R.id.btnIntroduceApp);
@@ -46,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
         userInfo = findViewById(R.id.user_info);
 
         // Get the stored username and display it
-        String username = sharedPreferences.getString("username", "user");
-        userInfo.setText(username);
+        fetchUsername();
 
         userInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SearchFoodActivity.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
@@ -76,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CalculateCaloriesActivity.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
@@ -84,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, HealthInfoActivity.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
@@ -97,22 +111,53 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void fetchUsername() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String username = dataSnapshot.child("username").getValue(String.class);
+                if (username != null) {
+                    userInfo.setText(username);
+                } else {
+                    userInfo.setText("User");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, "Failed to load user data", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.user_menu, popupMenu.getMenu());
 
         // Update the menu with user information
-        String email = sharedPreferences.getString("email", "Email not found");
-        int age = sharedPreferences.getInt("age", 0);
-        String gender = sharedPreferences.getString("gender", "Gender not found");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String email = dataSnapshot.child("email").getValue(String.class);
+                int age = dataSnapshot.child("age").getValue(Integer.class);
+                String gender = dataSnapshot.child("gender").getValue(String.class);
 
-        MenuItem emailItem = popupMenu.getMenu().findItem(R.id.menu_email);
-        MenuItem ageItem = popupMenu.getMenu().findItem(R.id.menu_age);
-        MenuItem genderItem = popupMenu.getMenu().findItem(R.id.menu_gender);
+                MenuItem emailItem = popupMenu.getMenu().findItem(R.id.menu_email);
+                MenuItem ageItem = popupMenu.getMenu().findItem(R.id.menu_age);
+                MenuItem genderItem = popupMenu.getMenu().findItem(R.id.menu_gender);
 
-        emailItem.setTitle("Email: " + email);
-        ageItem.setTitle("Age: " + age);
-        genderItem.setTitle("Gender: " + gender);
+                emailItem.setTitle("Email: " + email);
+                ageItem.setTitle("Age: " + age);
+                genderItem.setTitle("Gender: " + gender);
+
+                popupMenu.show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, "Failed to load user data", Toast.LENGTH_LONG).show();
+            }
+        });
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -125,13 +170,10 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        popupMenu.show();
     }
 
     private void logout() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("is_logged_in", false);
-        editor.apply();
+        userRef.child("is_logged_in").setValue(false);
 
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -139,4 +181,3 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 }
-

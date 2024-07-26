@@ -20,13 +20,14 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
 public class CalculateCaloriesActivity extends AppCompatActivity {
 
     private PieChart carbsPieChart;
@@ -43,11 +44,28 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     private Button backButton;
     private RecyclerView dateRecyclerView;
     private Spinner monthSpinner;
+    private DatabaseReference userRef;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculate_calories);
+
+        // Get the username from the intent
+        username = getIntent().getStringExtra("username");
+
+        // Check if username is null or empty
+        if (username == null || username.isEmpty()) {
+            Toast.makeText(this, "Username not found. Please log in again.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(CalculateCaloriesActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        // Initialize Firebase Database reference
+        userRef = FirebaseDatabase.getInstance().getReference("users").child(username);
 
         // Initialize PieCharts
         carbsPieChart = findViewById(R.id.carbsPieChart);
@@ -91,47 +109,38 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
             }
         });
 
-        // Set goals and current consumption
-        float carbsGoal = 200f;
-        float currentCarbs = 150f;
+        // Retrieve user data from Firebase and set goals and current consumption
+        retrieveUserData();
+    }
 
-        float fatGoal = 70f;
-        float currentFat = 50f;
+    private void retrieveUserData() {
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                float carbsGoal = task.getResult().child("carbsGoal").getValue(Float.class);
+                float currentCarbs = task.getResult().child("currentCarbs").getValue(Float.class);
 
-        float proteinGoal = 150f;
-        float currentProtein = 100f;
+                float fatGoal = task.getResult().child("fatGoal").getValue(Float.class);
+                float currentFat = task.getResult().child("currentFat").getValue(Float.class);
 
-        float waterGoal = 3000f; // in ml
-        float currentWater = 2000f; // in ml
+                float proteinGoal = task.getResult().child("proteinGoal").getValue(Float.class);
+                float currentProtein = task.getResult().child("currentProtein").getValue(Float.class);
 
-        float caloriesGoal = 2000f;
-        float currentCalories = 1500f;
+                float waterGoal = task.getResult().child("waterGoal").getValue(Float.class); // in ml
+                float currentWater = task.getResult().child("currentWater").getValue(Float.class); // in ml
 
-        // Set up PieCharts with goals and current consumption
-        setupPieChart(carbsPieChart, carbsValueText, currentCarbs, carbsGoal);
-        setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal);
-        setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal);
-        setupPieChart(waterPieChart, waterValueText, currentWater, waterGoal);
+                float caloriesGoal = task.getResult().child("caloriesGoal").getValue(Float.class);
+                float currentCalories = task.getResult().child("currentCalories").getValue(Float.class);
 
-        // Update ProgressBar and TextView for calories
-        setupCalorieProgressBar(calorieProgressBar, caloriesValueText, currentCalories, caloriesGoal);
+                // Set up PieCharts with goals and current consumption
+                setupPieChart(carbsPieChart, carbsValueText, currentCarbs, carbsGoal);
+                setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal);
+                setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal);
+                setupPieChart(waterPieChart, waterValueText, currentWater, waterGoal);
 
-        // Set OnClickListener for the Add Food Button
-        addFoodButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CalculateCaloriesActivity.this, FoodNutritionInfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Set OnClickListener for the Back Button
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CalculateCaloriesActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                // Update ProgressBar and TextView for calories
+                setupCalorieProgressBar(calorieProgressBar, caloriesValueText, currentCalories, caloriesGoal);
+            } else {
+                Toast.makeText(this, "Failed to retrieve user data", Toast.LENGTH_LONG).show();
             }
         });
     }

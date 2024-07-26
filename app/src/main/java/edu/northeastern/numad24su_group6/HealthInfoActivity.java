@@ -17,7 +17,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import edu.northeastern.numad24su_group6.model.User;
+import edu.northeastern.numad24su_group6.utils.Constants;
 
 public class HealthInfoActivity extends AppCompatActivity {
     private EditText ageEditText;
@@ -34,11 +46,23 @@ public class HealthInfoActivity extends AppCompatActivity {
     private TextView waterTextView;
     private Button calculateButton;
     private int activityLevel;
+    private String userId;
+    private DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_health_info);
+
+        userId = getIntent().getStringExtra("userId");
+
+        if (userId == null || userId.isEmpty()) {
+            Toast.makeText(this, "User information not found. Please log in again.", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
+        userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
         ageEditText = findViewById(R.id.ageEditText);
         heightEditText = findViewById(R.id.heightEditText);
@@ -54,15 +78,27 @@ public class HealthInfoActivity extends AppCompatActivity {
         waterTextView = findViewById(R.id.waterTextView);
         calculateButton = findViewById(R.id.calculateButton);
 
-        // Set up the activity level spinner
-        ArrayAdapter<CharSequence> activityAdapter = ArrayAdapter.createFromResource(this,
-                R.array.activity_levels_array, android.R.layout.simple_spinner_item);
+        setupActivityLevelSpinner(); // Set up the activity level spinner
+        setupGoalSpinner(); // Set up the goal spinner
+
+        calculateButton.setOnClickListener(v -> calculateCalories());
+
+        if (savedInstanceState != null) {
+            restoreInstanceState(savedInstanceState);
+        }
+
+        fetchUserData();
+    }
+
+    private void setupActivityLevelSpinner() {
+        List<String> activityDescriptions = new ArrayList<>(Constants.ACTIVITY_LEVEL_DESCRIPTIONS.values());
+        ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, activityDescriptions);
         activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         activityLevelSpinner.setAdapter(activityAdapter);
         activityLevelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                activityLevel = position + 1; // activity levels are 1-indexed
+                activityLevel = position + 1; // Assuming activity levels are 1-indexed
             }
 
             @Override
@@ -70,17 +106,48 @@ public class HealthInfoActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
+    }
 
-        calculateButton.setOnClickListener(new View.OnClickListener() {
+    private void setupGoalSpinner() {
+        ArrayAdapter<String> goalAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Constants.GOAL_DESCRIPTIONS);
+        goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        goalSpinner.setAdapter(goalAdapter);
+    }
+
+    private void fetchUserData() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                calculateCalories();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null) {
+                        populateUserInfo(user);
+                    } else {
+                        Toast.makeText(HealthInfoActivity.this, "Failed to load user data", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(HealthInfoActivity.this, "User information not found", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(HealthInfoActivity.this, "Failed to load user data", Toast.LENGTH_LONG).show();
             }
         });
+    }
 
-        if (savedInstanceState != null) {
-            restoreInstanceState(savedInstanceState);
+    private void populateUserInfo(User user) {
+        ageEditText.setText(String.valueOf(user.getAge()));
+        heightEditText.setText(String.valueOf(user.getHeight()));
+        weightEditText.setText(String.valueOf(user.getWeight()));
+        if ("Male".equalsIgnoreCase(user.getSex())) {
+            maleRadioButton.setChecked(true);
+        } else if ("Female".equalsIgnoreCase(user.getSex())) {
+            femaleRadioButton.setChecked(true);
         }
+        activityLevelSpinner.setSelection(user.getActivityLevel() - 1);
+        // Any additional user info population
     }
 
     private void calculateCalories() {
@@ -106,8 +173,8 @@ public class HealthInfoActivity extends AppCompatActivity {
             fatsTextView.setText("Fats: " + Math.round(user.getFats()) + " g");
             waterTextView.setText("Water: " + Math.round(user.getWater()) + " ml");
 
-            // Save user data to SharedPreferences
-            saveUserToSharedPreferences(user);
+            // Save user data to Firebase
+            saveUserToFirebase(user);
 
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Please enter valid numbers", Toast.LENGTH_SHORT).show();
@@ -116,19 +183,18 @@ public class HealthInfoActivity extends AppCompatActivity {
         }
     }
 
-    private void saveUserToSharedPreferences(User user) {
-        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("age", user.getAge());
-        editor.putString("sex", user.getSex());
-        editor.putFloat("height", (float) user.getHeight());
-        editor.putFloat("weight", (float) user.getWeight());
-        editor.putInt("activityLevel", user.getActivityLevel());
-        editor.apply();
+    private void saveUserToFirebase(User user) {
+        userRef.setValue(user).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, "User data updated successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to update user data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("age", ageEditText.getText().toString());
         outState.putString("height", heightEditText.getText().toString());

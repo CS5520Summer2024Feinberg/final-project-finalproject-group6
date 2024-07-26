@@ -15,6 +15,10 @@ public class User {
     private double fats;
     private double water;
 
+    // No-argument constructor
+    public User() {
+    }
+
     public User(int age, String sex, double height, double weight, int activityLevel) {
         if (age <= 0 || age > Constants.MAX_AGE) throw new IllegalArgumentException("Invalid age");
         if (!sex.equals("Male") && !sex.equals("Female")) throw new IllegalArgumentException("Invalid sex");
@@ -79,6 +83,47 @@ public class User {
         this.water = weight * 35; // 35 ml per kg of body weight
     }
 
+    // Getters and setters
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public int getActivityLevel() {
+        return activityLevel;
+    }
+
+    public void setActivityLevel(int activityLevel) {
+        this.activityLevel = activityLevel;
+    }
+
     public double getCarbs() {
         return carbs;
     }
@@ -97,26 +142,6 @@ public class User {
 
     public double getCalories() {
         return dailyCalorieNeeds;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public int getActivityLevel() {
-        return activityLevel;
     }
 
     @Override

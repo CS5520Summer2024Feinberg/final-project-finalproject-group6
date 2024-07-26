@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1018730694102",
+    "firebase_url": "https://numad24su-group6-final-default-rtdb.firebaseio.com",
+    "project_id": "numad24su-group6-final",
+    "storage_bucket": "numad24su-group6-final.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018730694102:android:b32edb6bf4a1a483cad077",
+        "android_client_info": {
+          "package_name": "edu.northeastern.numad24su_group6"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcck87hqENvbI4KBZyu0T3zQJiF0YKw7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

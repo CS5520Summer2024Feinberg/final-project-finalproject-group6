@@ -34,11 +34,14 @@ public class SearchFoodActivity extends AppCompatActivity {
     private TextView tvPrompt;
     private Spinner spinnerFoodList;
     private ImageView ivHintIcon;
+    private String username;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_food);
+
+        username = getIntent().getStringExtra("username");
 
         etFoodName = findViewById(R.id.etFoodName);
         btnSearch = findViewById(R.id.btnSearch);
@@ -111,6 +114,7 @@ public class SearchFoodActivity extends AppCompatActivity {
                                 intent.putExtra("foodProteins", foodProteins);
                                 intent.putExtra("foodFibers", foodFibers);
                                 intent.putExtra("imageUrl", imageUrl);
+                                intent.putExtra("username", username);
                                 startActivity(intent);
                             } else {
                                 showError("No nutrition information found.");

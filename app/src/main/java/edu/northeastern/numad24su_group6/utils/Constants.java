@@ -1,6 +1,8 @@
 package edu.northeastern.numad24su_group6.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Constants {
@@ -13,6 +15,11 @@ public class Constants {
 
     public static final Map<Integer, Double> ACTIVITY_LEVEL_TO_FACTOR = new HashMap<>();
     public static final Map<Integer, String> ACTIVITY_LEVEL_DESCRIPTIONS = new HashMap<>();
+    public static final List<String> GOAL_DESCRIPTIONS = Arrays.asList(
+            "To maintain weight",
+            "To lose weight",
+            "To gain weight"
+    );
 
     static {
         ACTIVITY_LEVEL_TO_FACTOR.put(1, 1.2);
