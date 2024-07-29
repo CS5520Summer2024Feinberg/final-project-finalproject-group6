@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SearchFoodActivity.class);
-                intent.putExtra("userId", userId);
+                intent.putExtra("userId", userId); // Pass userId to SearchFoodActivity
                 startActivity(intent);
             }
         });
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CalculateCaloriesActivity.class);
-                intent.putExtra("userId", userId);
+                intent.putExtra("userId", userId); // Pass userId to CalculateCaloriesActivity
                 startActivity(intent);
             }
         });
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, HealthInfoActivity.class);
-                intent.putExtra("userId", userId);
+                intent.putExtra("userId", userId); // Pass userId to HealthInfoActivity
                 startActivity(intent);
             }
         });

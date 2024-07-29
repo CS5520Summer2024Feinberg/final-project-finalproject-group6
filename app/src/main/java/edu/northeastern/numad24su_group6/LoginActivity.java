@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                     String email = dataSnapshot.child("email").getValue(String.class);
                     if (email != null) {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("userId", userId);
+                        intent.putExtra("userId", userId); // Pass userId to MainActivity
                         startActivity(intent);
                         finish();
                     } else {

@@ -31,7 +31,7 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
     private User user;
     private double foodCarbs, foodFats, foodProteins, foodFibers, foodCalories;
     private DatabaseReference userRef;
-    private String username;
+    private String userId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,9 +56,8 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
         tvFibersValue = findViewById(R.id.tvFibersValue);
         tvCaloriesValue = findViewById(R.id.tvCaloriesValue);
 
-        // Initialize Firebase Database reference
-        username = getIntent().getStringExtra("username");
-        userRef = FirebaseDatabase.getInstance().getReference("users").child(username);
+        userId = getIntent().getStringExtra("userId");
+        userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
         // Get data from the intent
         foodCarbs = getIntent().getDoubleExtra("foodCarbs", 0);

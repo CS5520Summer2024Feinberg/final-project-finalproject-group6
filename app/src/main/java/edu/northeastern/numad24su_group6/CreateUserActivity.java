@@ -3,8 +3,10 @@ package edu.northeastern.numad24su_group6;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,10 +27,13 @@ public class CreateUserActivity extends AppCompatActivity {
     private EditText passwordInput;
     private EditText emailInput;
     private EditText ageInput;
-    private EditText genderInput;
+    private Spinner genderSpinner;
     private Button createUserButton;
     private Button backButton;
     private FirebaseAuth auth;
+
+    private static final String DEFAULT_MALE_AGE = "25"; // Default age for male
+    private static final String DEFAULT_FEMALE_AGE = "23"; // Default age for female
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +46,11 @@ public class CreateUserActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.password_input);
         emailInput = findViewById(R.id.email_input);
         ageInput = findViewById(R.id.age_input);
-        genderInput = findViewById(R.id.gender_input);
+        genderSpinner = findViewById(R.id.gender_spinner);
         createUserButton = findViewById(R.id.create_user_button);
         backButton = findViewById(R.id.back_button);
+
+        setupGenderSpinner();
 
         createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,10 +58,22 @@ public class CreateUserActivity extends AppCompatActivity {
                 String username = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
                 String email = emailInput.getText().toString();
-                String age = ageInput.getText().toString();
-                String gender = genderInput.getText().toString();
+                String ageString = ageInput.getText().toString();
+                String gender = genderSpinner.getSelectedItem().toString();
 
-                if (!username.isEmpty() && !password.isEmpty() && !email.isEmpty() && !age.isEmpty() && !gender.isEmpty()) {
+                // Set default age based on gender if age is not provided
+                int age;
+                if (ageString.isEmpty()) {
+                    if (gender.equals("Male")) {
+                        age = Integer.parseInt(DEFAULT_MALE_AGE);
+                    } else {
+                        age = Integer.parseInt(DEFAULT_FEMALE_AGE);
+                    }
+                } else {
+                    age = Integer.parseInt(ageString);
+                }
+
+                if (!username.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
                     auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(CreateUserActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -67,7 +86,7 @@ public class CreateUserActivity extends AppCompatActivity {
                                         Map<String, Object> userUpdates = new HashMap<>();
                                         userUpdates.put("username", username);
                                         userUpdates.put("email", email);
-                                        userUpdates.put("age", Integer.parseInt(age));
+                                        userUpdates.put("age", age);
                                         userUpdates.put("gender", gender);
                                         userUpdates.put("carbsGoal", 200f); // Example initial values
                                         userUpdates.put("currentCarbs", 0f);
@@ -85,7 +104,7 @@ public class CreateUserActivity extends AppCompatActivity {
                                             if (task1.isSuccessful()) {
                                                 Toast.makeText(CreateUserActivity.this, "User created successfully", Toast.LENGTH_LONG).show();
                                                 Intent intent = new Intent(CreateUserActivity.this, MainActivity.class);
-                                                intent.putExtra("username", username);
+                                                intent.putExtra("userId", userId);
                                                 startActivity(intent);
                                                 finish();
                                             } else {
@@ -111,5 +130,12 @@ public class CreateUserActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void setupGenderSpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Male", "Female"});
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSpinner.setAdapter(adapter);
+        genderSpinner.setSelection(0); // Default selection is "Male"
     }
 }

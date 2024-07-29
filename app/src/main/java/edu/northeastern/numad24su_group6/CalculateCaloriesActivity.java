@@ -46,26 +46,25 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     private Spinner monthSpinner;
     private DatabaseReference userRef;
     private String username;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculate_calories);
 
-        // Get the username from the intent
-        username = getIntent().getStringExtra("username");
+        userId = getIntent().getStringExtra("userId");
 
-        // Check if username is null or empty
-        if (username == null || username.isEmpty()) {
-            Toast.makeText(this, "Username not found. Please log in again.", Toast.LENGTH_LONG).show();
+        if (userId == null || userId.isEmpty()) {
+            Toast.makeText(this, "User information not found. Please log in again.", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(CalculateCaloriesActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
             return;
         }
 
-        // Initialize Firebase Database reference
-        userRef = FirebaseDatabase.getInstance().getReference("users").child(username);
+        userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
 
         // Initialize PieCharts
         carbsPieChart = findViewById(R.id.carbsPieChart);
