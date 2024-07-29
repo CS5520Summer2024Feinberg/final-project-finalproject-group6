@@ -217,6 +217,17 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
                 dateUpdates.put("currentProtein", currentProtein);
                 dateUpdates.put("currentCalories", currentCalories);
 
+                // Add food details to meal planner
+                DatabaseReference mealPlannerRef = dateRef.child("mealPlanner").push();
+                Map<String, Object> foodDetails = new HashMap<>();
+                foodDetails.put("foodName", tvFoodName.getText().toString());
+                foodDetails.put("carbs", addedCarbs);
+                foodDetails.put("fats", addedFats);
+                foodDetails.put("proteins", addedProteins);
+                foodDetails.put("calories", addedCalories);
+                foodDetails.put("amount", amount);
+                mealPlannerRef.setValue(foodDetails);
+
                 dateRef.updateChildren(dateUpdates).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(FoodNutritionInfoActivity.this, "Food added successfully", Toast.LENGTH_LONG).show();

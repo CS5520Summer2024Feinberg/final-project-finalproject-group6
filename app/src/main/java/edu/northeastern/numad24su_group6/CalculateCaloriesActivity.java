@@ -3,16 +3,12 @@ package edu.northeastern.numad24su_group6;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,8 +19,10 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import edu.northeastern.numad24su_group6.model.Meal;
 import edu.northeastern.numad24su_group6.model.User;
 
 public class CalculateCaloriesActivity extends AppCompatActivity {
@@ -56,6 +55,9 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     private float fatGoal;
     private float proteinGoal;
     private float caloriesGoal;
+    private RecyclerView mealPlannerRecyclerView;
+    private MealPlannerAdapter mealPlannerAdapter;
+    private List<Meal> mealList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,19 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
 
         // Retrieve user data from Firebase and set goals and current consumption
         retrieveUserData();
+
+        mealPlannerRecyclerView = findViewById(R.id.mealPlannerRecyclerView);
+        mealPlannerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mealPlannerAdapter = new MealPlannerAdapter(mealList);
+        mealPlannerRecyclerView.setAdapter(mealPlannerAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Retrieve and update meal planner data whenever the activity resumes
+        String currentDate = tvSelectedDate.getText().toString();
+        retrieveUserDataForDate(currentDate);
     }
 
     private void showDatePickerDialog() {
@@ -161,19 +176,37 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
                 float currentProtein = dataSnapshot.child("currentProtein").getValue(Float.class) != null ? dataSnapshot.child("currentProtein").getValue(Float.class) : 0;
                 float currentCalories = dataSnapshot.child("currentCalories").getValue(Float.class) != null ? dataSnapshot.child("currentCalories").getValue(Float.class) : 0;
 
-                // Set up PieCharts with goals and current consumption
                 setupPieChart(carbsPieChart, carbsValueText, currentCarbs, carbsGoal);
                 setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal);
                 setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal);
-
-                // Update ProgressBar and TextView for calories
                 setupCalorieProgressBar(calorieProgressBar, caloriesValueText, currentCalories, caloriesGoal);
+
+                // Retrieve meal planner data
+                retrieveMealPlannerData(dateRef.child("mealPlanner"));
             } else {
-                // If no data exists for the current date, set current values to 0
                 setupPieChart(carbsPieChart, carbsValueText, 0, carbsGoal);
                 setupPieChart(fatPieChart, fatValueText, 0, fatGoal);
                 setupPieChart(proteinPieChart, proteinValueText, 0, proteinGoal);
                 setupCalorieProgressBar(calorieProgressBar, caloriesValueText, 0, caloriesGoal);
+            }
+        });
+    }
+
+    private void retrieveMealPlannerData(DatabaseReference mealPlannerRef) {
+        mealPlannerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mealList.clear();
+                for (DataSnapshot mealSnapshot : dataSnapshot.getChildren()) {
+                    Meal meal = mealSnapshot.getValue(Meal.class);
+                    mealList.add(meal);
+                }
+                mealPlannerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(CalculateCaloriesActivity.this, "Failed to load meal planner data", Toast.LENGTH_LONG).show();
             }
         });
     }
