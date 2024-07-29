@@ -19,7 +19,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import edu.northeastern.numad24su_group6.model.User;
@@ -189,40 +192,39 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
             return;
         }
 
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        String currentDate = getCurrentDate();
+        DatabaseReference dateRef = userRef.child("dates").child(currentDate);
+
+        dateRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    int amount = seekBarAmount.getProgress();
-                    double factor = amount / 100.0;
+                int amount = seekBarAmount.getProgress();
+                double factor = amount / 100.0;
 
-                    float addedCarbs = (float) (foodCarbs * factor);
-                    float addedFats = (float) (foodFats * factor);
-                    float addedProteins = (float) (foodProteins * factor);
-                    float addedCalories = (float) (foodCalories * factor);
+                float addedCarbs = (float) (foodCarbs * factor);
+                float addedFats = (float) (foodFats * factor);
+                float addedProteins = (float) (foodProteins * factor);
+                float addedCalories = (float) (foodCalories * factor);
 
-                    float currentCarbs = dataSnapshot.child("currentCarbs").getValue(Float.class) + addedCarbs;
-                    float currentFat = dataSnapshot.child("currentFat").getValue(Float.class) + addedFats;
-                    float currentProtein = dataSnapshot.child("currentProtein").getValue(Float.class) + addedProteins;
-                    float currentCalories = dataSnapshot.child("currentCalories").getValue(Float.class) + addedCalories;
+                float currentCarbs = dataSnapshot.child("currentCarbs").getValue(Float.class) == null ? addedCarbs : dataSnapshot.child("currentCarbs").getValue(Float.class) + addedCarbs;
+                float currentFat = dataSnapshot.child("currentFat").getValue(Float.class) == null ? addedFats : dataSnapshot.child("currentFat").getValue(Float.class) + addedFats;
+                float currentProtein = dataSnapshot.child("currentProtein").getValue(Float.class) == null ? addedProteins : dataSnapshot.child("currentProtein").getValue(Float.class) + addedProteins;
+                float currentCalories = dataSnapshot.child("currentCalories").getValue(Float.class) == null ? addedCalories : dataSnapshot.child("currentCalories").getValue(Float.class) + addedCalories;
 
-                    Map<String, Object> userUpdates = new HashMap<>();
-                    userUpdates.put("currentCarbs", currentCarbs);
-                    userUpdates.put("currentFat", currentFat);
-                    userUpdates.put("currentProtein", currentProtein);
-                    userUpdates.put("currentCalories", currentCalories);
+                Map<String, Object> dateUpdates = new HashMap<>();
+                dateUpdates.put("currentCarbs", currentCarbs);
+                dateUpdates.put("currentFat", currentFat);
+                dateUpdates.put("currentProtein", currentProtein);
+                dateUpdates.put("currentCalories", currentCalories);
 
-                    userRef.updateChildren(userUpdates).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(FoodNutritionInfoActivity.this, "Food added successfully", Toast.LENGTH_LONG).show();
-                            finish();
-                        } else {
-                            Toast.makeText(FoodNutritionInfoActivity.this, "Failed to add food", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(FoodNutritionInfoActivity.this, "User information not found", Toast.LENGTH_LONG).show();
-                }
+                dateRef.updateChildren(dateUpdates).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(FoodNutritionInfoActivity.this, "Food added successfully", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        Toast.makeText(FoodNutritionInfoActivity.this, "Failed to add food", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
             @Override
@@ -230,6 +232,11 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
                 Toast.makeText(FoodNutritionInfoActivity.this, "Failed to retrieve user data", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return sdf.format(new Date());
     }
 
     @Override

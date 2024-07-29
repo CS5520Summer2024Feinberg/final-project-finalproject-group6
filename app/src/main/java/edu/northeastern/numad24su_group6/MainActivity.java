@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private Button btnFoodNutritionInfo;
     private Button btnCalculateCalories;
     private Button btnHealthInfo;
-    private Button btnUserLogin;
     private TextView userInfo;
     private DatabaseReference userRef;
     private String userId;
@@ -54,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         btnFoodNutritionInfo = findViewById(R.id.btnFoodNutritionInfo);
         btnCalculateCalories = findViewById(R.id.btnCalculateCalories);
         btnHealthInfo = findViewById(R.id.btnHealthInfo);
-        btnUserLogin = findViewById(R.id.btnUserLogin);
         userInfo = findViewById(R.id.user_info);
 
         // Get the stored username and display it
@@ -98,14 +96,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, HealthInfoActivity.class);
                 intent.putExtra("userId", userId); // Pass userId to HealthInfoActivity
-                startActivity(intent);
-            }
-        });
-
-        btnUserLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
