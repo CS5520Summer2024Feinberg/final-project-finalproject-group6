@@ -184,7 +184,18 @@ public class HealthInfoActivity extends AppCompatActivity {
     }
 
     private void saveUserToFirebase(User user) {
-        userRef.setValue(user).addOnCompleteListener(task -> {
+        Map<String, Object> userUpdates = new HashMap<>();
+        userUpdates.put("age", user.getAge());
+        userUpdates.put("height", user.getHeight());
+        userUpdates.put("weight", user.getWeight());
+        userUpdates.put("activityLevel", user.getActivityLevel());
+        userUpdates.put("caloriesGoal", user.getCalories());
+        userUpdates.put("carbsGoal", user.getCarbs());
+        userUpdates.put("proteinGoal", user.getProteins());
+        userUpdates.put("fatGoal", user.getFats());
+        userUpdates.put("waterGoal", user.getWater());
+
+        userRef.updateChildren(userUpdates).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "User data updated successfully", Toast.LENGTH_SHORT).show();
             } else {
