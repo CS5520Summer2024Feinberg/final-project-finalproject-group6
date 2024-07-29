@@ -69,10 +69,13 @@ public class User {
 
         switch (goal) {
             case "To maintain weight":
+                this.setCaloriesGoal(dailyCalorieNeeds);
                 return dailyCalorieNeeds;
             case "To lose weight":
+                this.setCaloriesGoal(dailyCalorieNeeds * Constants.EIGHTY_FIVE);
                 return dailyCalorieNeeds * Constants.EIGHTY_FIVE;
             case "To gain weight":
+                this.setCaloriesGoal(dailyCalorieNeeds * Constants.ONE_FIFTEEN);
                 return dailyCalorieNeeds * Constants.ONE_FIFTEEN;
             default:
                 throw new IllegalArgumentException("Invalid goal. Choose from 'maintain', 'lose', or 'gain'.");
@@ -80,11 +83,11 @@ public class User {
     }
 
     public void calculateMacronutrients() {
-        if (dailyCalorieNeeds <= 0) throw new IllegalArgumentException("Daily calorie needs should be a positive value");
+        if (caloriesGoal <= 0) throw new IllegalArgumentException("Daily calorie needs should be a positive value");
 
-        this.carbs = dailyCalorieNeeds * 0.5 / 4; // 50% of calories from carbs, 4 calories per gram
-        this.proteins = dailyCalorieNeeds * 0.2 / 4; // 20% of calories from proteins, 4 calories per gram
-        this.fats = dailyCalorieNeeds * 0.3 / 9; // 30% of calories from fats, 9 calories per gram
+        this.carbs = caloriesGoal * 0.5 / 4; // 50% of calories from carbs, 4 calories per gram
+        this.proteins = caloriesGoal * 0.2 / 4; // 20% of calories from proteins, 4 calories per gram
+        this.fats = caloriesGoal * 0.3 / 9; // 30% of calories from fats, 9 calories per gram
         this.water = weight * 35; // 35 ml per kg of body weight
     }
 
@@ -175,6 +178,10 @@ public class User {
 
     public double getCaloriesGoal() {
         return caloriesGoal;
+    }
+
+    public double getWaterGoal() {
+        return weight * 35;
     }
 
     public void setCaloriesGoal(double caloriesGoal) {

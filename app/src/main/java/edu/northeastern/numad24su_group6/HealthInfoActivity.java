@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -151,6 +152,10 @@ public class HealthInfoActivity extends AppCompatActivity {
     }
 
     private void calculateCalories() {
+        if (!validateInputs()) {
+            return;
+        }
+
         try {
             int age = Integer.parseInt(ageEditText.getText().toString());
             double height = Double.parseDouble(heightEditText.getText().toString());
@@ -183,6 +188,35 @@ public class HealthInfoActivity extends AppCompatActivity {
         }
     }
 
+    private boolean validateInputs() {
+        if (ageEditText.getText().toString().trim().isEmpty()) {
+            ageEditText.setError("Please enter your age");
+            return false;
+        }
+
+        if (heightEditText.getText().toString().trim().isEmpty()) {
+            heightEditText.setError("Please enter your height");
+            return false;
+        }
+
+        if (weightEditText.getText().toString().trim().isEmpty()) {
+            weightEditText.setError("Please enter your weight");
+            return false;
+        }
+
+        if (!maleRadioButton.isChecked() && !femaleRadioButton.isChecked()) {
+            Toast.makeText(this, "Please select your gender", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (goalSpinner.getSelectedItem() == null) {
+            Toast.makeText(this, "Please select a goal", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
     private void saveUserToFirebase(User user) {
         Map<String, Object> userUpdates = new HashMap<>();
         userUpdates.put("age", user.getAge());
@@ -198,6 +232,8 @@ public class HealthInfoActivity extends AppCompatActivity {
         userRef.updateChildren(userUpdates).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "User data updated successfully", Toast.LENGTH_SHORT).show();
+                // Fetch updated user data from Firebase to ensure UI is refreshed
+                fetchUserData();
             } else {
                 Toast.makeText(this, "Failed to update user data", Toast.LENGTH_SHORT).show();
             }
