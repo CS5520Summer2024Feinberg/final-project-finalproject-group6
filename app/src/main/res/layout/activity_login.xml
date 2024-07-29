@@ -4,119 +4,95 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:padding="16dp">
 
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/logo_image"
+        android:layout_width="63dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+    <TextView
+        android:id="@+id/keep_health_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Track Your Nutrition with NutriSmart, Optimize Your Health with Ease!"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcome_text"
+        app:layout_constraintWidth_percent="0.8" />
 
-            <ImageView
-                android:id="@+id/logo_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/logo"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="32dp" />
+    <EditText
+        android:id="@+id/email_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/keep_health_text"
+        app:layout_constraintWidth_percent="0.8" />
 
-            <TextView
-                android:id="@+id/welcome_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Welcome to NutriSmart!"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/logo_image"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintWidth_percent="0.8" />
-
-            <TextView
-                android:id="@+id/keep_health_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Track Your Nutrition with NutriSmart, Optimize Your Health with Ease!"
-                android:textSize="15sp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/welcome_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintWidth_percent="0.8" />
-
-            <EditText
-                android:id="@+id/email_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:layout_marginTop="32dp"
-                app:layout_constraintTop_toBottomOf="@id/keep_health_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintWidth_percent="0.8"
-                android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/password_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/email_input"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintWidth_percent="0.8"
-                android:inputType="textPassword" />
-
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:layout_marginTop="32dp"
-                app:layout_constraintTop_toBottomOf="@id/password_input"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintWidth_percent="0.6" />
-
-            <Button
-                android:id="@+id/create_user_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Create User"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/login_button"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintWidth_percent="0.6" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
+    <EditText
+        android:id="@+id/password_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email_input"
+        app:layout_constraintWidth_percent="0.8" />
 
     <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/login_button"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Back"
-        android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="4dp"
+        android:text="Login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password_input"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <Button
+        android:id="@+id/create_user_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Create User"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_button"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Welcome to NutriSmart!"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo_image"
+        app:layout_constraintWidth_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

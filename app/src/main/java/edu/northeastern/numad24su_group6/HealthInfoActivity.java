@@ -178,6 +178,12 @@ public class HealthInfoActivity extends AppCompatActivity {
             fatsTextView.setText("Fats: " + Math.round(user.getFats()) + " g");
             waterTextView.setText("Water: " + Math.round(user.getWater()) + " ml");
 
+            // Set visibility of macronutrient TextViews to VISIBLE
+            carbsTextView.setVisibility(View.VISIBLE);
+            proteinsTextView.setVisibility(View.VISIBLE);
+            fatsTextView.setVisibility(View.VISIBLE);
+            waterTextView.setVisibility(View.VISIBLE);
+
             // Save user data to Firebase
             saveUserToFirebase(user);
 
@@ -270,5 +276,19 @@ public class HealthInfoActivity extends AppCompatActivity {
         proteinsTextView.setText(savedInstanceState.getString("proteins"));
         fatsTextView.setText(savedInstanceState.getString("fats"));
         waterTextView.setText(savedInstanceState.getString("water"));
+
+        // Ensure the macronutrient TextViews are visible if they were saved in the instance state
+        if (!savedInstanceState.getString("carbs").isEmpty()) {
+            carbsTextView.setVisibility(View.VISIBLE);
+        }
+        if (!savedInstanceState.getString("proteins").isEmpty()) {
+            proteinsTextView.setVisibility(View.VISIBLE);
+        }
+        if (!savedInstanceState.getString("fats").isEmpty()) {
+            fatsTextView.setVisibility(View.VISIBLE);
+        }
+        if (!savedInstanceState.getString("water").isEmpty()) {
+            waterTextView.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,22 +28,24 @@ public class MainActivity extends AppCompatActivity {
     private TextView userInfo;
     private DatabaseReference userRef;
     private String userId;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
-        userId = getIntent().getStringExtra("userId");
+        auth = FirebaseAuth.getInstance();
 
-        // Check if userId is null or empty
-        if (userId == null || userId.isEmpty()) {
-            Toast.makeText(this, "User information not found. Please log in again.", Toast.LENGTH_LONG).show();
+        if (auth.getCurrentUser() == null) {
+            // No user is signed in, redirect to LoginActivity
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
             return;
+        } else {
+            // User is signed in, get userId
+            userId = auth.getCurrentUser().getUid();
         }
 
         // Initialize Firebase Database reference
@@ -163,8 +166,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        userRef.child("is_logged_in").setValue(false);
-
+        auth.signOut();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

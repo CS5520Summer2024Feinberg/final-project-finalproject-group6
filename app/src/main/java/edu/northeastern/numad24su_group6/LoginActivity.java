@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordInput;
     private Button loginButton;
     private Button createUserButton;
-    private Button backButton;
     private FirebaseAuth auth;
 
     @Override
@@ -41,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.login_button);
         createUserButton = findViewById(R.id.create_user_button);
-        backButton = findViewById(R.id.back_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,15 +71,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, CreateUserActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
     }

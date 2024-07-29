@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NUMAD24Su_Group6</string>
     <string name="food_image">Food Image</string>
+    <string name="password">Password</string>
 
     <string-array name="goals_array">
         <item>To maintain weight</item>
