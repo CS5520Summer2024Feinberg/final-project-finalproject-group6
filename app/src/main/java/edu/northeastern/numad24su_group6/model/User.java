@@ -15,6 +15,11 @@ public class User {
     private double fats;
     private double water;
 
+    private double carbsGoal;
+    private double proteinGoal;
+    private double fatGoal;
+    private double caloriesGoal;
+
     // No-argument constructor
     public User() {
     }
@@ -142,6 +147,38 @@ public class User {
 
     public double getCalories() {
         return dailyCalorieNeeds;
+    }
+
+    public double getCarbsGoal() {
+        return carbsGoal;
+    }
+
+    public void setCarbsGoal(double carbsGoal) {
+        this.carbsGoal = carbsGoal;
+    }
+
+    public double getProteinGoal() {
+        return proteinGoal;
+    }
+
+    public void setProteinGoal(double proteinGoal) {
+        this.proteinGoal = proteinGoal;
+    }
+
+    public double getFatGoal() {
+        return fatGoal;
+    }
+
+    public void setFatGoal(double fatGoal) {
+        this.fatGoal = fatGoal;
+    }
+
+    public double getCaloriesGoal() {
+        return caloriesGoal;
+    }
+
+    public void setCaloriesGoal(double caloriesGoal) {
+        this.caloriesGoal = caloriesGoal;
     }
 
     @Override

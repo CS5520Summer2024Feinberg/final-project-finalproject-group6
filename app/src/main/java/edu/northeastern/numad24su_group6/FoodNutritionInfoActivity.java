@@ -8,12 +8,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,15 +27,15 @@ import edu.northeastern.numad24su_group6.model.User;
 public class FoodNutritionInfoActivity extends AppCompatActivity {
 
     private Button btnBack, btnAddFood;
-    private TextView tvFoodName, tvCarbsValue, tvFatsValue, tvProteinsValue, tvFibersValue, tvCaloriesValue, tvSeekBarValue;
+    private TextView tvFoodName, tvCarbsValue, tvFatsValue, tvProteinsValue, tvCaloriesValue, tvSeekBarValue;
     private ImageView ivFoodImage;
     private SeekBar seekBarAmount;
-    private ProgressBar progressBarCarbs, progressBarFats, progressBarProteins, progressBarFibers, progressBarCalories;
+    private ProgressBar progressBarCarbs, progressBarFats, progressBarProteins, progressBarCalories;
 
-    private User user;
-    private double foodCarbs, foodFats, foodProteins, foodFibers, foodCalories;
+    private double foodCarbs, foodFats, foodProteins, foodCalories;
     private DatabaseReference userRef;
     private String userId;
+    private User currentUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,12 +52,10 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
         progressBarCarbs = findViewById(R.id.progressBarCarbs);
         progressBarFats = findViewById(R.id.progressBarFats);
         progressBarProteins = findViewById(R.id.progressBarProteins);
-        progressBarFibers = findViewById(R.id.progressBarFibers);
         progressBarCalories = findViewById(R.id.progressBarCalories);
         tvCarbsValue = findViewById(R.id.tvCarbsValue);
         tvFatsValue = findViewById(R.id.tvFatsValue);
         tvProteinsValue = findViewById(R.id.tvProteinsValue);
-        tvFibersValue = findViewById(R.id.tvFibersValue);
         tvCaloriesValue = findViewById(R.id.tvCaloriesValue);
 
         userId = getIntent().getStringExtra("userId");
@@ -63,7 +65,6 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
         foodCarbs = getIntent().getDoubleExtra("foodCarbs", 0);
         foodFats = getIntent().getDoubleExtra("foodFats", 0);
         foodProteins = getIntent().getDoubleExtra("foodProteins", 0);
-        foodFibers = getIntent().getDoubleExtra("foodFibers", 0);
         foodCalories = getIntent().getDoubleExtra("foodCalories", 0);
         String label = getIntent().getStringExtra("label");
         String imageUrl = getIntent().getStringExtra("imageUrl");
@@ -98,11 +99,63 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
         }
 
         btnAddFood.setOnClickListener(v -> updateUserData());
+
+        fetchUserData();
     }
 
-    private User getUser() {
-        // Retrieve user data (for now, create a dummy user)
-        return new User(25, "Male", 175, 70, 3);
+    private void fetchUserData() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null) {
+                        currentUser = user;
+                        // Set progress bars and text views with current and goal values
+                        updateProgressBars(user);
+                    } else {
+                        Toast.makeText(FoodNutritionInfoActivity.this, "Failed to load user data", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(FoodNutritionInfoActivity.this, "User information not found", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(FoodNutritionInfoActivity.this, "Failed to load user data", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void updateProgressBars(User user) {
+        updateProgressBar(progressBarCarbs, tvCarbsValue, user.getCarbsGoal());
+        updateProgressBar(progressBarFats, tvFatsValue, user.getFatGoal());
+        updateProgressBar(progressBarProteins, tvProteinsValue, user.getProteinGoal());
+        updateProgressBar(progressBarCalories, tvCaloriesValue, user.getCaloriesGoal());
+    }
+
+    private void updateProgressBar(ProgressBar progressBar, TextView textView, double goalValue) {
+        if (textView == null || progressBar == null) {
+            return;
+        }
+
+        double factor = seekBarAmount.getProgress() / 100.0;
+        double currentValue = 0;
+
+        if (progressBar == progressBarCarbs) {
+            currentValue = foodCarbs * factor;
+        } else if (progressBar == progressBarFats) {
+            currentValue = foodFats * factor;
+        } else if (progressBar == progressBarProteins) {
+            currentValue = foodProteins * factor;
+        } else if (progressBar == progressBarCalories) {
+            currentValue = foodCalories * factor;
+        }
+
+        int progress = (int) ((currentValue / goalValue) * 100);
+        progressBar.setProgress(progress);
+        textView.setText(String.format("%.1f / %.1f", currentValue, goalValue));
     }
 
     private void updateNutritionValues(int amount) {
@@ -110,48 +163,71 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
         double carbs = foodCarbs * factor;
         double fats = foodFats * factor;
         double proteins = foodProteins * factor;
-        double fibers = foodFibers * factor;
         double calories = foodCalories * factor;
 
-        tvCarbsValue.setText(String.format("%.1fg", carbs));
-        tvFatsValue.setText(String.format("%.1fg", fats));
-        tvProteinsValue.setText(String.format("%.1fg", proteins));
-        tvFibersValue.setText(String.format("%.1fg", fibers));
-        tvCaloriesValue.setText(String.format("%.1f Cal", calories));
+        if (tvCarbsValue != null) {
+            tvCarbsValue.setText(String.format("%.1fg", carbs));
+        }
+        if (tvFatsValue != null) {
+            tvFatsValue.setText(String.format("%.1fg", fats));
+        }
+        if (tvProteinsValue != null) {
+            tvProteinsValue.setText(String.format("%.1fg", proteins));
+        }
+        if (tvCaloriesValue != null) {
+            tvCaloriesValue.setText(String.format("%.1f Cal", calories));
+        }
 
-        progressBarCarbs.setProgress((int) (carbs / user.getCarbs() * 100));
-        progressBarFats.setProgress((int) (fats / user.getFats() * 100));
-        progressBarProteins.setProgress((int) (proteins / user.getProteins() * 100));
-        progressBarFibers.setProgress((int) (fibers / user.getWater() * 100));
-        progressBarCalories.setProgress((int) (calories / user.getCalories() * 100));
+        if (currentUser != null) {
+            updateProgressBars(currentUser);
+        }
     }
 
     private void updateUserData() {
-        userRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                float currentCarbs = task.getResult().child("currentCarbs").getValue(Float.class) + (float) foodCarbs;
-                float currentFat = task.getResult().child("currentFat").getValue(Float.class) + (float) foodFats;
-                float currentProtein = task.getResult().child("currentProtein").getValue(Float.class) + (float) foodProteins;
-                float currentWater = task.getResult().child("currentWater").getValue(Float.class) + (float) foodFibers; // Example
-                float currentCalories = task.getResult().child("currentCalories").getValue(Float.class) + (float) foodCalories;
+        if (userId == null) {
+            Toast.makeText(this, "User data not loaded yet. Please try again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                Map<String, Object> userUpdates = new HashMap<>();
-                userUpdates.put("currentCarbs", currentCarbs);
-                userUpdates.put("currentFat", currentFat);
-                userUpdates.put("currentProtein", currentProtein);
-                userUpdates.put("currentWater", currentWater); // Example
-                userUpdates.put("currentCalories", currentCalories);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    int amount = seekBarAmount.getProgress();
+                    double factor = amount / 100.0;
 
-                userRef.updateChildren(userUpdates).addOnCompleteListener(updateTask -> {
-                    if (updateTask.isSuccessful()) {
-                        Toast.makeText(FoodNutritionInfoActivity.this, "Food added successfully", Toast.LENGTH_LONG).show();
-                        finish();
-                    } else {
-                        Toast.makeText(FoodNutritionInfoActivity.this, "Failed to add food", Toast.LENGTH_LONG).show();
-                    }
-                });
-            } else {
-                Toast.makeText(this, "Failed to retrieve user data", Toast.LENGTH_LONG).show();
+                    float addedCarbs = (float) (foodCarbs * factor);
+                    float addedFats = (float) (foodFats * factor);
+                    float addedProteins = (float) (foodProteins * factor);
+                    float addedCalories = (float) (foodCalories * factor);
+
+                    float currentCarbs = dataSnapshot.child("currentCarbs").getValue(Float.class) + addedCarbs;
+                    float currentFat = dataSnapshot.child("currentFat").getValue(Float.class) + addedFats;
+                    float currentProtein = dataSnapshot.child("currentProtein").getValue(Float.class) + addedProteins;
+                    float currentCalories = dataSnapshot.child("currentCalories").getValue(Float.class) + addedCalories;
+
+                    Map<String, Object> userUpdates = new HashMap<>();
+                    userUpdates.put("currentCarbs", currentCarbs);
+                    userUpdates.put("currentFat", currentFat);
+                    userUpdates.put("currentProtein", currentProtein);
+                    userUpdates.put("currentCalories", currentCalories);
+
+                    userRef.updateChildren(userUpdates).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(FoodNutritionInfoActivity.this, "Food added successfully", Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(FoodNutritionInfoActivity.this, "Failed to add food", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(FoodNutritionInfoActivity.this, "User information not found", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(FoodNutritionInfoActivity.this, "Failed to retrieve user data", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -165,7 +241,6 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
         outState.putDouble("storedCarbs", foodCarbs);
         outState.putDouble("storedFats", foodFats);
         outState.putDouble("storedProteins", foodProteins);
-        outState.putDouble("storedFibers", foodFibers);
         outState.putDouble("storedCalories", foodCalories);
     }
 
@@ -182,7 +257,6 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
             foodCarbs = savedInstanceState.getDouble("storedCarbs");
             foodFats = savedInstanceState.getDouble("storedFats");
             foodProteins = savedInstanceState.getDouble("storedProteins");
-            foodFibers = savedInstanceState.getDouble("storedFibers");
             foodCalories = savedInstanceState.getDouble("storedCalories");
 
             updateNutritionValues(seekBarAmount.getProgress());

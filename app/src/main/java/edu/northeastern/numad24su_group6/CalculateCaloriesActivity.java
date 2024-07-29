@@ -86,6 +86,19 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         addFoodButton = findViewById(R.id.btnAddFood);
         backButton = findViewById(R.id.btnBack);
 
+        addFoodButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CalculateCaloriesActivity.this, SearchFoodActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+        });
+
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CalculateCaloriesActivity.this, MainActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+            finish();
+        });
+
         // Initialize RecyclerView
         dateRecyclerView = findViewById(R.id.dateRecyclerView);
         dateRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
