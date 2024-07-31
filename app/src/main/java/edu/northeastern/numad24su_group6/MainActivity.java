@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.northeastern.numad24su_group6.utils.Notification;
+
 public class MainActivity extends AppCompatActivity {
     private Button btnIntroduceApp;
     private Button btnFoodNutritionInfo;
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // init notification
+        Notification.getInstance(this);
 
         auth = FirebaseAuth.getInstance();
 
