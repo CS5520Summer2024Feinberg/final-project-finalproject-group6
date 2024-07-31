@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         // init notification
         Notification.getInstance(this);
 
+        Notification.getInstance(MainActivity.this).testNotification(60, "This is a test notification!");
+
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null) {

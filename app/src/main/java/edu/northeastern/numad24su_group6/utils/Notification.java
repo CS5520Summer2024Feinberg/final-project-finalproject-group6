@@ -1,5 +1,6 @@
 package edu.northeastern.numad24su_group6.utils;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,8 +10,6 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import edu.northeastern.numad24su_group6.MainActivity;
 import edu.northeastern.numad24su_group6.R;
@@ -18,12 +17,10 @@ import edu.northeastern.numad24su_group6.R;
 public class Notification {
 
     private static Notification instance;
-    private Timer timer;
     private Context context;
 
     private Notification(Context context) {
         this.context = context;
-        timer = new Timer();
         scheduleNotification(7, 0, "It's breakfast time!");
         scheduleNotification(12, 0, "It's lunch time!");
         scheduleNotification(18, 0, "It's dinner time!");
@@ -42,25 +39,37 @@ public class Notification {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
 
-        long delay = calendar.getTimeInMillis() - System.currentTimeMillis();
-        if (delay < 0) {
-            delay += 24 * 60 * 60 * 1000;  // Add a day if the time has already passed
+        long timeInMillis = calendar.getTimeInMillis();
+        if (timeInMillis < System.currentTimeMillis()) {
+            timeInMillis += 24 * 60 * 60 * 1000;  // Add a day if the time has already passed
         }
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                showNotification(message);
-            }
-        }, delay, 24 * 60 * 60 * 1000);  // Repeat every 24 hours
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra("message", message);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, hour * 100 + minute, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
-    private void showNotification(String message) {
+    public void testNotification(int delaySeconds, String message) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra("message", message);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long triggerAtMillis = System.currentTimeMillis() + delaySeconds * 1000;
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
+    }
+
+    public void showNotification(String message) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         String channelId = "meal_notification_channel";
-        NotificationChannel channel = new NotificationChannel(channelId, "Meal Notifications", NotificationManager.IMPORTANCE_DEFAULT);
-        notificationManager.createNotificationChannel(channel);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, "Meal Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
