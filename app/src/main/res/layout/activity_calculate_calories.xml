@@ -11,21 +11,38 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+        
+        <LinearLayout
 
-        <!-- Current Date TextView -->
-        <TextView
-            android:id="@+id/tvSelectedDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Today's Date"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground"
-            android:onClick="showDatePickerDialog"/>
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Current Date TextView -->
+            <TextView
+                android:id="@+id/tvSelectedDate"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Today's Date"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="showDatePickerDialog"/>
+            
+           <ImageView
+               android:id="@+id/sharedImage"
+               android:layout_marginTop="10dp"
+               android:layout_width="30dp"
+               android:src="@drawable/share_png"
+               android:layout_height="30dp"/>
+            
+        </LinearLayout>
+
+        
 
         <LinearLayout
             android:id="@+id/progressLayout"

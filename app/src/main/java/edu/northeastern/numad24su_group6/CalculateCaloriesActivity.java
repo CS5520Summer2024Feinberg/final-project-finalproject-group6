@@ -2,7 +2,10 @@ package edu.northeastern.numad24su_group6;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +36,7 @@ import java.util.Locale;
 
 import edu.northeastern.numad24su_group6.model.Meal;
 import edu.northeastern.numad24su_group6.model.User;
+import edu.northeastern.numad24su_group6.utils.ScreenshotUtils;
 
 public class CalculateCaloriesActivity extends AppCompatActivity {
 
@@ -63,6 +67,17 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculate_calories);
+
+
+        findViewById(R.id.sharedImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bitmap screenshot = ScreenshotUtils.getInstance().takeScreenshot(CalculateCaloriesActivity.this);
+                Uri screenshotUri = ScreenshotUtils.getInstance().saveScreenshot(CalculateCaloriesActivity.this, screenshot);
+                ScreenshotUtils.getInstance().shareScreenshot(CalculateCaloriesActivity.this, screenshotUri);
+            }
+        });
+
 
         userId = getIntent().getStringExtra("userId");
 
