@@ -44,10 +44,28 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     private PieChart carbsPieChart;
     private PieChart fatPieChart;
     private PieChart proteinPieChart;
+    private PieChart sodiumPieChart;
+    private PieChart potassiumPieChart;
+    private PieChart calciumPieChart;
+    private PieChart ironPieChart;
+    private PieChart vitaminAPieChart;
+    private PieChart vitaminBPieChart;
+    private PieChart vitaminCPieChart;
+    private PieChart vitaminDPieChart;
+    private PieChart vitaminEPieChart;
     private TextView carbsValueText;
     private TextView fatValueText;
     private TextView proteinValueText;
     private TextView caloriesValueText;
+    private TextView sodiumValueText;
+    private TextView potassiumValueText;
+    private TextView calciumValueText;
+    private TextView ironValueText;
+    private TextView vitaminAValueText;
+    private TextView vitaminBValueText;
+    private TextView vitaminCValueText;
+    private TextView vitaminDValueText;
+    private TextView vitaminEValueText;
     private ProgressBar calorieProgressBar;
     private Button addFoodButton;
     private Button backButton;
@@ -59,6 +77,16 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     private float fatGoal;
     private float proteinGoal;
     private float caloriesGoal;
+    private float sodiumGoal;
+    private float potassiumGoal;
+    private float calciumGoal;
+    private float ironGoal;
+    private float vitaminAGoal;
+    private float vitaminBGoal;
+    private float vitaminCGoal;
+    private float vitaminDGoal;
+    private float vitaminEGoal;
+
     private RecyclerView mealPlannerRecyclerView;
     private MealPlannerAdapter mealPlannerAdapter;
     private List<Meal> mealList = new ArrayList<>();
@@ -68,7 +96,6 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculate_calories);
 
-
         findViewById(R.id.sharedImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,7 +104,6 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
                 ScreenshotUtils.getInstance().shareScreenshot(CalculateCaloriesActivity.this, screenshotUri);
             }
         });
-
 
         userId = getIntent().getStringExtra("userId");
 
@@ -100,12 +126,30 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         carbsPieChart = findViewById(R.id.carbsPieChart);
         fatPieChart = findViewById(R.id.fatPieChart);
         proteinPieChart = findViewById(R.id.proteinPieChart);
+        sodiumPieChart = findViewById(R.id.sodiumPieChart);
+        potassiumPieChart = findViewById(R.id.potassiumPieChart);
+        calciumPieChart = findViewById(R.id.calciumPieChart);
+        ironPieChart = findViewById(R.id.ironPieChart);
+        vitaminAPieChart = findViewById(R.id.vitaminAPieChart);
+        vitaminBPieChart = findViewById(R.id.vitaminBPieChart);
+        vitaminCPieChart = findViewById(R.id.vitaminCPieChart);
+        vitaminDPieChart = findViewById(R.id.vitaminDPieChart);
+        vitaminEPieChart = findViewById(R.id.vitaminEPieChart);
 
         // Initialize TextViews
         carbsValueText = findViewById(R.id.carbsValue);
         fatValueText = findViewById(R.id.fatValue);
         proteinValueText = findViewById(R.id.proteinValue);
         caloriesValueText = findViewById(R.id.caloriesValue);
+        sodiumValueText = findViewById(R.id.sodiumValue);
+        potassiumValueText = findViewById(R.id.potassiumValue);
+        calciumValueText = findViewById(R.id.calciumValue);
+        ironValueText = findViewById(R.id.ironValue);
+        vitaminAValueText = findViewById(R.id.vitaminAValue);
+        vitaminBValueText = findViewById(R.id.vitaminBValue);
+        vitaminCValueText = findViewById(R.id.vitaminCValue);
+        vitaminDValueText = findViewById(R.id.vitaminDValue);
+        vitaminEValueText = findViewById(R.id.vitaminEValue);
 
         // Initialize ProgressBar
         calorieProgressBar = findViewById(R.id.calorieProgressBar);
@@ -169,6 +213,15 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
                 fatGoal = (float) currentUser.getFatGoal();
                 proteinGoal = (float) currentUser.getProteinGoal();
                 caloriesGoal = (float) currentUser.getCaloriesGoal();
+                sodiumGoal = (float) currentUser.getSodiumGoal();
+                potassiumGoal = (float) currentUser.getPotassiumGoal();
+                calciumGoal = (float) currentUser.getCalciumGoal();
+                ironGoal = (float) currentUser.getIronGoal();
+                vitaminAGoal = (float) currentUser.getVitaminAGoal();
+                vitaminBGoal = (float) currentUser.getVitaminBGoal();
+                vitaminCGoal = (float) currentUser.getVitaminCGoal();
+                vitaminDGoal = (float) currentUser.getVitaminDGoal();
+                vitaminEGoal = (float) currentUser.getVitaminEGoal();
 
                 String currentDate = getCurrentDate();
                 tvSelectedDate.setText(currentDate);
@@ -190,10 +243,28 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
                 float currentFat = dataSnapshot.child("currentFat").getValue(Float.class) != null ? dataSnapshot.child("currentFat").getValue(Float.class) : 0;
                 float currentProtein = dataSnapshot.child("currentProtein").getValue(Float.class) != null ? dataSnapshot.child("currentProtein").getValue(Float.class) : 0;
                 float currentCalories = dataSnapshot.child("currentCalories").getValue(Float.class) != null ? dataSnapshot.child("currentCalories").getValue(Float.class) : 0;
+                float currentSodium = dataSnapshot.child("currentSodium").getValue(Float.class) != null ? dataSnapshot.child("currentSodium").getValue(Float.class) : 0;
+                float currentPotassium = dataSnapshot.child("currentPotassium").getValue(Float.class) != null ? dataSnapshot.child("currentPotassium").getValue(Float.class) : 0;
+                float currentCalcium = dataSnapshot.child("currentCalcium").getValue(Float.class) != null ? dataSnapshot.child("currentCalcium").getValue(Float.class) : 0;
+                float currentIron = dataSnapshot.child("currentIron").getValue(Float.class) != null ? dataSnapshot.child("currentIron").getValue(Float.class) : 0;
+                float currentVitaminA = dataSnapshot.child("currentVitaminA").getValue(Float.class) != null ? dataSnapshot.child("currentVitaminA").getValue(Float.class) : 0;
+                float currentVitaminB = dataSnapshot.child("currentVitaminB").getValue(Float.class) != null ? dataSnapshot.child("currentVitaminB").getValue(Float.class) : 0;
+                float currentVitaminC = dataSnapshot.child("currentVitaminC").getValue(Float.class) != null ? dataSnapshot.child("currentVitaminC").getValue(Float.class) : 0;
+                float currentVitaminD = dataSnapshot.child("currentVitaminD").getValue(Float.class) != null ? dataSnapshot.child("currentVitaminD").getValue(Float.class) : 0;
+                float currentVitaminE = dataSnapshot.child("currentVitaminE").getValue(Float.class) != null ? dataSnapshot.child("currentVitaminE").getValue(Float.class) : 0;
 
                 setupPieChart(carbsPieChart, carbsValueText, currentCarbs, carbsGoal);
                 setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal);
                 setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal);
+                setupPieChart(sodiumPieChart, sodiumValueText, currentSodium, sodiumGoal);
+                setupPieChart(potassiumPieChart, potassiumValueText, currentPotassium, potassiumGoal);
+                setupPieChart(calciumPieChart, calciumValueText, currentCalcium, calciumGoal);
+                setupPieChart(ironPieChart, ironValueText, currentIron, ironGoal);
+                setupPieChart(vitaminAPieChart, vitaminAValueText, currentVitaminA, vitaminAGoal);
+                setupPieChart(vitaminBPieChart, vitaminBValueText, currentVitaminB, vitaminBGoal);
+                setupPieChart(vitaminCPieChart, vitaminCValueText, currentVitaminC, vitaminCGoal);
+                setupPieChart(vitaminDPieChart, vitaminDValueText, currentVitaminD, vitaminDGoal);
+                setupPieChart(vitaminEPieChart, vitaminEValueText, currentVitaminE, vitaminEGoal);
                 setupCalorieProgressBar(calorieProgressBar, caloriesValueText, currentCalories, caloriesGoal);
 
                 // Retrieve meal planner data
@@ -202,6 +273,15 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
                 setupPieChart(carbsPieChart, carbsValueText, 0, carbsGoal);
                 setupPieChart(fatPieChart, fatValueText, 0, fatGoal);
                 setupPieChart(proteinPieChart, proteinValueText, 0, proteinGoal);
+                setupPieChart(sodiumPieChart, sodiumValueText, 0, sodiumGoal);
+                setupPieChart(potassiumPieChart, potassiumValueText, 0, potassiumGoal);
+                setupPieChart(calciumPieChart, calciumValueText, 0, calciumGoal);
+                setupPieChart(ironPieChart, ironValueText, 0, ironGoal);
+                setupPieChart(vitaminAPieChart, vitaminAValueText, 0, vitaminAGoal);
+                setupPieChart(vitaminBPieChart, vitaminBValueText, 0, vitaminBGoal);
+                setupPieChart(vitaminCPieChart, vitaminCValueText, 0, vitaminCGoal);
+                setupPieChart(vitaminDPieChart, vitaminDValueText, 0, vitaminDGoal);
+                setupPieChart(vitaminEPieChart, vitaminEValueText, 0, vitaminEGoal);
                 setupCalorieProgressBar(calorieProgressBar, caloriesValueText, 0, caloriesGoal);
             }
         });

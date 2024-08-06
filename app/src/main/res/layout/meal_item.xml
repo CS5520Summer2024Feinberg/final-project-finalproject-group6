@@ -43,4 +43,58 @@
         android:layout_height="wrap_content"
         android:text="Amount: 0 g" />
 
+    <TextView
+        android:id="@+id/sodiumTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sodium: 0 mg" />
+
+    <TextView
+        android:id="@+id/potassiumTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Potassium: 0 mg" />
+
+    <TextView
+        android:id="@+id/calciumTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcium: 0 mg" />
+
+    <TextView
+        android:id="@+id/ironTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Iron: 0 mg" />
+
+    <TextView
+        android:id="@+id/vitaminATextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vitamin A: 0 IU" />
+
+    <TextView
+        android:id="@+id/vitaminBTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vitamin B: 0 mg" />
+
+    <TextView
+        android:id="@+id/vitaminCTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vitamin C: 0 mg" />
+
+    <TextView
+        android:id="@+id/vitaminDTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vitamin D: 0 IU" />
+
+    <TextView
+        android:id="@+id/vitaminETextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vitamin E: 0 mg" />
+
 </LinearLayout>

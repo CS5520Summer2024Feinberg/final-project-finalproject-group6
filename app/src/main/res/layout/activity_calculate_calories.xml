@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,9 +10,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
-        
-        <LinearLayout
 
+        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -32,17 +30,15 @@
                 android:focusable="true"
                 android:background="?attr/selectableItemBackground"
                 android:onClick="showDatePickerDialog"/>
-            
-           <ImageView
-               android:id="@+id/sharedImage"
-               android:layout_marginTop="10dp"
-               android:layout_width="30dp"
-               android:src="@drawable/share_png"
-               android:layout_height="30dp"/>
-            
-        </LinearLayout>
 
-        
+            <ImageView
+                android:id="@+id/sharedImage"
+                android:layout_marginTop="10dp"
+                android:layout_width="30dp"
+                android:src="@drawable/share_png"
+                android:layout_height="30dp"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/progressLayout"
@@ -71,9 +67,6 @@
                 style="?android:attr/progressBarStyleHorizontal" />
         </LinearLayout>
 
-        <!-- Nutrition Info Layout -->
-
-        <!-- Add Food Button -->
         <LinearLayout
             android:id="@+id/nutritionInfoLayout"
             android:layout_width="match_parent"
@@ -82,6 +75,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Nutrition Info PieCharts and TextViews -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -185,6 +179,330 @@
 
                         <TextView
                             android:id="@+id/proteinValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- New Nutrition Elements -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/sodiumPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sodium" />
+
+                        <TextView
+                            android:id="@+id/sodiumValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/potassiumPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Potassium" />
+
+                        <TextView
+                            android:id="@+id/potassiumValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/calciumPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Calcium" />
+
+                        <TextView
+                            android:id="@+id/calciumValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/ironPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Iron" />
+
+                        <TextView
+                            android:id="@+id/ironValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/vitaminAPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vitamin A" />
+
+                        <TextView
+                            android:id="@+id/vitaminAValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/vitaminBPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vitamin B" />
+
+                        <TextView
+                            android:id="@+id/vitaminBValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/vitaminCPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vitamin C" />
+
+                        <TextView
+                            android:id="@+id/vitaminCValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/vitaminDPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vitamin D" />
+
+                        <TextView
+                            android:id="@+id/vitaminDValue"
+                            android:layout_width="74dp"
+                            android:layout_height="wrap_content"
+                            android:text="0/0" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/vitaminEPieChart"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vitamin E" />
+
+                        <TextView
+                            android:id="@+id/vitaminEValue"
                             android:layout_width="74dp"
                             android:layout_height="wrap_content"
                             android:text="0/0" />

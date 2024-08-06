@@ -45,6 +45,15 @@ public class HealthInfoActivity extends AppCompatActivity {
     private TextView proteinsTextView;
     private TextView fatsTextView;
     private TextView waterTextView;
+    private TextView sodiumTextView;
+    private TextView potassiumTextView;
+    private TextView calciumTextView;
+    private TextView ironTextView;
+    private TextView vitaminATextView;
+    private TextView vitaminBTextView;
+    private TextView vitaminCTextView;
+    private TextView vitaminDTextView;
+    private TextView vitaminETextView;
     private Button calculateButton;
     private int activityLevel;
     private String userId;
@@ -77,6 +86,15 @@ public class HealthInfoActivity extends AppCompatActivity {
         proteinsTextView = findViewById(R.id.proteinsTextView);
         fatsTextView = findViewById(R.id.fatsTextView);
         waterTextView = findViewById(R.id.waterTextView);
+        sodiumTextView = findViewById(R.id.sodiumTextView);
+        potassiumTextView = findViewById(R.id.potassiumTextView);
+        calciumTextView = findViewById(R.id.calciumTextView);
+        ironTextView = findViewById(R.id.ironTextView);
+        vitaminATextView = findViewById(R.id.vitaminATextView);
+        vitaminBTextView = findViewById(R.id.vitaminBTextView);
+        vitaminCTextView = findViewById(R.id.vitaminCTextView);
+        vitaminDTextView = findViewById(R.id.vitaminDTextView);
+        vitaminETextView = findViewById(R.id.vitaminETextView);
         calculateButton = findViewById(R.id.calculateButton);
 
         setupActivityLevelSpinner(); // Set up the activity level spinner
@@ -177,14 +195,30 @@ public class HealthInfoActivity extends AppCompatActivity {
             proteinsTextView.setText("Proteins: " + Math.round(user.getProteins()) + " g");
             fatsTextView.setText("Fats: " + Math.round(user.getFats()) + " g");
             waterTextView.setText("Water: " + Math.round(user.getWater()) + " ml");
+            sodiumTextView.setText("Sodium: " + Math.round(user.getSodiumGoal()) + " mg");
+            potassiumTextView.setText("Potassium: " + Math.round(user.getPotassiumGoal()) + " mg");
+            calciumTextView.setText("Calcium: " + Math.round(user.getCalciumGoal()) + " mg");
+            ironTextView.setText("Iron: " + Math.round(user.getIronGoal()) + " mg");
+            vitaminATextView.setText("Vitamin A: " + Math.round(user.getVitaminAGoal()) + " mcg");
+            vitaminBTextView.setText("Vitamin B: " + Math.round(user.getVitaminBGoal()) + " mcg");
+            vitaminCTextView.setText("Vitamin C: " + Math.round(user.getVitaminCGoal()) + " mg");
+            vitaminDTextView.setText("Vitamin D: " + Math.round(user.getVitaminDGoal()) + " mcg");
+            vitaminETextView.setText("Vitamin E: " + Math.round(user.getVitaminEGoal()) + " mg");
 
-            // Set visibility of macronutrient TextViews to VISIBLE
             carbsTextView.setVisibility(View.VISIBLE);
             proteinsTextView.setVisibility(View.VISIBLE);
             fatsTextView.setVisibility(View.VISIBLE);
             waterTextView.setVisibility(View.VISIBLE);
+            sodiumTextView.setVisibility(View.VISIBLE);
+            potassiumTextView.setVisibility(View.VISIBLE);
+            calciumTextView.setVisibility(View.VISIBLE);
+            ironTextView.setVisibility(View.VISIBLE);
+            vitaminATextView.setVisibility(View.VISIBLE);
+            vitaminBTextView.setVisibility(View.VISIBLE);
+            vitaminCTextView.setVisibility(View.VISIBLE);
+            vitaminDTextView.setVisibility(View.VISIBLE);
+            vitaminETextView.setVisibility(View.VISIBLE);
 
-            // Save user data to Firebase
             saveUserToFirebase(user);
 
         } catch (NumberFormatException e) {
@@ -234,6 +268,15 @@ public class HealthInfoActivity extends AppCompatActivity {
         userUpdates.put("proteinGoal", user.getProteins());
         userUpdates.put("fatGoal", user.getFats());
         userUpdates.put("waterGoal", user.getWater());
+        userUpdates.put("sodiumGoal", user.getSodiumGoal());
+        userUpdates.put("potassiumGoal", user.getPotassiumGoal());
+        userUpdates.put("calciumGoal", user.getCalciumGoal());
+        userUpdates.put("ironGoal", user.getIronGoal());
+        userUpdates.put("vitaminAGoal", user.getVitaminAGoal());
+        userUpdates.put("vitaminBGoal", user.getVitaminBGoal());
+        userUpdates.put("vitaminCGoal", user.getVitaminCGoal());
+        userUpdates.put("vitaminDGoal", user.getVitaminDGoal());
+        userUpdates.put("vitaminEGoal", user.getVitaminEGoal());
 
         userRef.updateChildren(userUpdates).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -261,6 +304,15 @@ public class HealthInfoActivity extends AppCompatActivity {
         outState.putString("proteins", proteinsTextView.getText().toString());
         outState.putString("fats", fatsTextView.getText().toString());
         outState.putString("water", waterTextView.getText().toString());
+        outState.putString("sodium", sodiumTextView.getText().toString());
+        outState.putString("potassium", potassiumTextView.getText().toString());
+        outState.putString("calcium", calciumTextView.getText().toString());
+        outState.putString("iron", ironTextView.getText().toString());
+        outState.putString("vitaminA", vitaminATextView.getText().toString());
+        outState.putString("vitaminB", vitaminBTextView.getText().toString());
+        outState.putString("vitaminC", vitaminCTextView.getText().toString());
+        outState.putString("vitaminD", vitaminDTextView.getText().toString());
+        outState.putString("vitaminE", vitaminETextView.getText().toString());
     }
 
     private void restoreInstanceState(Bundle savedInstanceState) {
@@ -276,19 +328,28 @@ public class HealthInfoActivity extends AppCompatActivity {
         proteinsTextView.setText(savedInstanceState.getString("proteins"));
         fatsTextView.setText(savedInstanceState.getString("fats"));
         waterTextView.setText(savedInstanceState.getString("water"));
+        sodiumTextView.setText(savedInstanceState.getString("sodium"));
+        potassiumTextView.setText(savedInstanceState.getString("potassium"));
+        calciumTextView.setText(savedInstanceState.getString("calcium"));
+        ironTextView.setText(savedInstanceState.getString("iron"));
+        vitaminATextView.setText(savedInstanceState.getString("vitaminA"));
+        vitaminBTextView.setText(savedInstanceState.getString("vitaminB"));
+        vitaminCTextView.setText(savedInstanceState.getString("vitaminC"));
+        vitaminDTextView.setText(savedInstanceState.getString("vitaminD"));
+        vitaminETextView.setText(savedInstanceState.getString("vitaminE"));
 
-        // Ensure the macronutrient TextViews are visible if they were saved in the instance state
-        if (!savedInstanceState.getString("carbs").isEmpty()) {
-            carbsTextView.setVisibility(View.VISIBLE);
-        }
-        if (!savedInstanceState.getString("proteins").isEmpty()) {
-            proteinsTextView.setVisibility(View.VISIBLE);
-        }
-        if (!savedInstanceState.getString("fats").isEmpty()) {
-            fatsTextView.setVisibility(View.VISIBLE);
-        }
-        if (!savedInstanceState.getString("water").isEmpty()) {
-            waterTextView.setVisibility(View.VISIBLE);
-        }
+        carbsTextView.setVisibility(View.VISIBLE);
+        proteinsTextView.setVisibility(View.VISIBLE);
+        fatsTextView.setVisibility(View.VISIBLE);
+        waterTextView.setVisibility(View.VISIBLE);
+        sodiumTextView.setVisibility(View.VISIBLE);
+        potassiumTextView.setVisibility(View.VISIBLE);
+        calciumTextView.setVisibility(View.VISIBLE);
+        ironTextView.setVisibility(View.VISIBLE);
+        vitaminATextView.setVisibility(View.VISIBLE);
+        vitaminBTextView.setVisibility(View.VISIBLE);
+        vitaminCTextView.setVisibility(View.VISIBLE);
+        vitaminDTextView.setVisibility(View.VISIBLE);
+        vitaminETextView.setVisibility(View.VISIBLE);
     }
 }

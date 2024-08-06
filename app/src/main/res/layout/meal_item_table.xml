@@ -59,4 +59,85 @@
         android:padding="8dp"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/sodiumTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Sodium"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/potassiumTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Potassium"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/calciumTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Calcium"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/ironTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Iron"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/vitaminATextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Vitamin A"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/vitaminBTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Vitamin B"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/vitaminCTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Vitamin C"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/vitaminDTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Vitamin D"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/vitaminETextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Vitamin E"
+        android:padding="8dp"
+        android:textSize="16sp" />
+
 </LinearLayout>
