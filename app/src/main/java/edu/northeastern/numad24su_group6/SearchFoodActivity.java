@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,10 +35,9 @@ import java.util.Map;
 
 public class SearchFoodActivity extends AppCompatActivity {
 
-    private EditText etFoodName;
+    private AutoCompleteTextView etFoodName;
     private Button btnSearch, btnBack;
     private TextView tvPrompt;
-    private Spinner spinnerFoodList;
     private ImageView ivHintIcon;
     private String username;
     private String userId;
@@ -63,45 +63,32 @@ public class SearchFoodActivity extends AppCompatActivity {
     }};
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_food);
 
-        userId = getIntent().getStringExtra("userId");
-
+        // Initializing AutoCompleteTextView
         etFoodName = findViewById(R.id.etFoodName);
+
+        // Setup the adapter with food suggestions
+        String[] foodSuggestions = {"Apple", "Banana", "Chicken", "Date", "Egg", "Fish"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, foodSuggestions);
+        etFoodName.setAdapter(adapter);
+        etFoodName.setThreshold(1);  // Start suggesting from the first character
+
+        userId = getIntent().getStringExtra("userId");
         btnSearch = findViewById(R.id.btnSearch);
         btnBack = findViewById(R.id.btnBack);
         tvPrompt = findViewById(R.id.tvPrompt);
         ivHintIcon = findViewById(R.id.ivHintIcon);
-        spinnerFoodList = findViewById(R.id.spinnerFoodList);
-
-        // Initialize Spinner with food items
-        String[] foodItems = {"Select a food", "egg", "coffee", "chicken", "beef", "pizza", "bread", "milk"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, foodItems);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFoodList.setAdapter(adapter);
-
-        spinnerFoodList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    etFoodName.setText(parent.getItemAtPosition(position).toString());
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
-        });
 
         btnSearch.setOnClickListener(v -> {
             String foodName = etFoodName.getText().toString();
             if (!foodName.isEmpty()) {
                 searchFoodInfo(foodName);
             } else {
-                Toast.makeText(this, "Please enter a food name or select one from the list.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter a food name.", Toast.LENGTH_SHORT).show();
             }
         });
 
