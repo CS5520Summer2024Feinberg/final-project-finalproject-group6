@@ -90,7 +90,7 @@ public class Notification {
         );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.app_logo)
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Meal Time Reminder")
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
