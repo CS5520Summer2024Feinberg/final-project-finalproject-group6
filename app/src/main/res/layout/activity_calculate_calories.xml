@@ -20,7 +20,7 @@
             <TextView
                 android:id="@+id/tvSelectedDate"
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="Today's Date"
@@ -108,7 +108,7 @@
 
                         <TextView
                             android:id="@+id/carbsValue"
-                            android:layout_width="71dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -140,7 +140,7 @@
 
                         <TextView
                             android:id="@+id/fatValue"
-                            android:layout_width="76dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -179,7 +179,7 @@
 
                         <TextView
                             android:id="@+id/proteinValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -219,7 +219,7 @@
 
                         <TextView
                             android:id="@+id/sodiumValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -251,7 +251,7 @@
 
                         <TextView
                             android:id="@+id/potassiumValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -290,7 +290,7 @@
 
                         <TextView
                             android:id="@+id/calciumValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -322,7 +322,7 @@
 
                         <TextView
                             android:id="@+id/ironValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -361,7 +361,7 @@
 
                         <TextView
                             android:id="@+id/vitaminAValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -393,7 +393,7 @@
 
                         <TextView
                             android:id="@+id/vitaminBValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -432,7 +432,7 @@
 
                         <TextView
                             android:id="@+id/vitaminCValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -464,7 +464,7 @@
 
                         <TextView
                             android:id="@+id/vitaminDValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>
@@ -503,7 +503,7 @@
 
                         <TextView
                             android:id="@+id/vitaminEValue"
-                            android:layout_width="74dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/0" />
                     </LinearLayout>

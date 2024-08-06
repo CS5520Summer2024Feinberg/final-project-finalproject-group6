@@ -358,7 +358,7 @@ public class FoodNutritionInfoActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("foodName", tvFoodName.getText().toString());
-        outState.putString("imageUrl", ivFoodImage.getTag() != null ? ivFoodImage.getTag().toString() : "");
+        outState.putString("imageUrl", (String) ivFoodImage.getTag());
         outState.putInt("seekBarAmount", seekBarAmount.getProgress());
         outState.putDouble("storedCarbs", foodCarbs);
         outState.putDouble("storedFats", foodFats);

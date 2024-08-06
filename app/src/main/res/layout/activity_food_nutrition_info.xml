@@ -1,361 +1,343 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".FoodNutritionInfoActivity">
+    android:padding="16dp">
 
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
-
-    <ImageView
-        android:id="@+id/ivFoodImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_food_placeholder" />
-
-    <TextView
-        android:id="@+id/tvFoodName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ivFoodImage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:text="Food Name"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <SeekBar
-        android:id="@+id/seekBarAmount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvFoodName"
-        android:layout_marginTop="16dp"
-        android:layout_toStartOf="@+id/tvSeekBarValue"
-        android:layout_alignParentStart="true"
-        android:max="500" />
-
-    <TextView
-        android:id="@+id/tvSeekBarValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvFoodName"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_alignParentEnd="true"
-        android:text="0g"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/btnAddFood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/seekBarAmount"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:text="Add Food" />
-
-    <TextView
-        android:id="@+id/tvPrompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnAddFood"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:text="* Drag the slider to select amount"
-        android:textSize="14sp"
-        android:textStyle="italic" />
-
-    <TextView
-        android:id="@+id/tvNutritionLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvPrompt"
-        android:layout_marginTop="16dp"
-        android:text="Nutrition Info"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvNutritionLabel"
-        android:layout_marginTop="8dp">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back" />
+
+        <ImageView
+            android:id="@+id/ivFoodImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_food_placeholder" />
+
+        <TextView
+            android:id="@+id/tvFoodName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Food Name"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal" />
+
+        <SeekBar
+            android:id="@+id/seekBarAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:max="500" />
 
-            <!-- Carbs -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Carbs" />
+        <TextView
+            android:id="@+id/tvSeekBarValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="end"
+            android:text="0g"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvCarbsValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0g" />
+        <Button
+            android:id="@+id/btnAddFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Add Food" />
 
-            <ProgressBar
-                android:id="@+id/progressBarCarbs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="* Drag the slider to select amount"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:layout_gravity="center_horizontal" />
 
-            <!-- Fats -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fats" />
+        <TextView
+            android:id="@+id/tvNutritionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Nutrition Info"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal" />
 
-            <TextView
-                android:id="@+id/tvFatsValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0g" />
+        <!-- Carbs -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Carbs" />
 
-            <ProgressBar
-                android:id="@+id/progressBarFats"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvCarbsValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0g" />
 
-            <!-- Proteins -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Proteins" />
+        <ProgressBar
+            android:id="@+id/progressBarCarbs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvProteinsValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0g" />
+        <!-- Fats -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fats" />
 
-            <ProgressBar
-                android:id="@+id/progressBarProteins"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvFatsValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0g" />
 
-            <!-- Calories -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Calories" />
+        <ProgressBar
+            android:id="@+id/progressBarFats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvCaloriesValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 kcal" />
+        <!-- Proteins -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Proteins" />
 
-            <ProgressBar
-                android:id="@+id/progressBarCalories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvProteinsValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0g" />
 
-            <!-- Sodium -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sodium" />
+        <ProgressBar
+            android:id="@+id/progressBarProteins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvSodiumValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 mg" />
+        <!-- Calories -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calories" />
 
-            <ProgressBar
-                android:id="@+id/progressBarSodium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvCaloriesValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 kcal" />
 
-            <!-- Potassium -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Potassium" />
+        <ProgressBar
+            android:id="@+id/progressBarCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvPotassiumValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 mg" />
+        <!-- Sodium -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sodium" />
 
-            <ProgressBar
-                android:id="@+id/progressBarPotassium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvSodiumValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 mg" />
 
-            <!-- Calcium -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Calcium" />
+        <ProgressBar
+            android:id="@+id/progressBarSodium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvCalciumValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 mg" />
+        <!-- Potassium -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Potassium" />
 
-            <ProgressBar
-                android:id="@+id/progressBarCalcium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvPotassiumValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 mg" />
 
-            <!-- Iron -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Iron" />
+        <ProgressBar
+            android:id="@+id/progressBarPotassium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvIronValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 mg" />
+        <!-- Calcium -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calcium" />
 
-            <ProgressBar
-                android:id="@+id/progressBarIron"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvCalciumValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 mg" />
 
-            <!-- Vitamin A -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vitamin A" />
+        <ProgressBar
+            android:id="@+id/progressBarCalcium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvVitaminAValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 IU" />
+        <!-- Iron -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Iron" />
 
-            <ProgressBar
-                android:id="@+id/progressBarVitaminA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvIronValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 mg" />
 
-            <!-- Vitamin B -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vitamin B" />
+        <ProgressBar
+            android:id="@+id/progressBarIron"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvVitaminBValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 mg" />
+        <!-- Vitamin A -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vitamin A" />
 
-            <ProgressBar
-                android:id="@+id/progressBarVitaminB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvVitaminAValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 IU" />
 
-            <!-- Vitamin C -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vitamin C" />
+        <ProgressBar
+            android:id="@+id/progressBarVitaminA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvVitaminCValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 mg" />
+        <!-- Vitamin B -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vitamin B" />
 
-            <ProgressBar
-                android:id="@+id/progressBarVitaminC"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvVitaminBValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 mg" />
 
-            <!-- Vitamin D -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vitamin D" />
+        <ProgressBar
+            android:id="@+id/progressBarVitaminB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvVitaminDValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 IU" />
+        <!-- Vitamin C -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vitamin C" />
 
-            <ProgressBar
-                android:id="@+id/progressBarVitaminD"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvVitaminCValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 mg" />
 
-            <!-- Vitamin E -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vitamin E" />
+        <ProgressBar
+            android:id="@+id/progressBarVitaminC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
 
-            <TextView
-                android:id="@+id/tvVitaminEValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 mg" />
+        <!-- Vitamin D -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vitamin D" />
 
-            <ProgressBar
-                android:id="@+id/progressBarVitaminE"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="0"
-                android:max="100" />
+        <TextView
+            android:id="@+id/tvVitaminDValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 IU" />
 
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+        <ProgressBar
+            android:id="@+id/progressBarVitaminD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progress="0"
+            android:max="100" />
+
+        <!-- Vitamin E -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vitamin E" />
+
+        <TextView
+            android:id="@+id/tvVitaminEValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 mg" />
+
+        <ProgressBar
+            android:id="@+id/progressBarVitaminE"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0" />
+
+    </LinearLayout>
+</ScrollView>

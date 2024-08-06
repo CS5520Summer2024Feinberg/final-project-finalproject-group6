@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -43,6 +42,8 @@ import edu.northeastern.numad24su_group6.utils.ScreenshotUtils;
 
 public class CalculateCaloriesActivity extends AppCompatActivity {
 
+    private static final String KEY_SELECTED_DATE = "selectedDate";
+
     private TextView tvSelectedDate;
     private PieChart carbsPieChart, fatPieChart, proteinPieChart, sodiumPieChart, potassiumPieChart, calciumPieChart, ironPieChart, vitaminAPieChart, vitaminBPieChart, vitaminCPieChart, vitaminDPieChart, vitaminEPieChart;
     private TextView carbsValueText, fatValueText, proteinValueText, caloriesValueText, sodiumValueText, potassiumValueText, calciumValueText, ironValueText, vitaminAValueText, vitaminBValueText, vitaminCValueText, vitaminDValueText, vitaminEValueText;
@@ -51,6 +52,7 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
     private DatabaseReference userRef;
     private String userId;
     private User currentUser;
+    private String selectedDate;
 
     private float carbsGoal, fatGoal, proteinGoal, caloriesGoal, sodiumGoal, potassiumGoal, calciumGoal, ironGoal, vitaminAGoal, vitaminBGoal, vitaminCGoal, vitaminDGoal, vitaminEGoal;
 
@@ -71,7 +73,6 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
             Uri screenshotUri = ScreenshotUtils.getInstance().saveScreenshot(CalculateCaloriesActivity.this, screenshot);
             ScreenshotUtils.getInstance().shareScreenshot(CalculateCaloriesActivity.this, screenshotUri);
         });
-
 
         userId = getIntent().getStringExtra("userId");
 
@@ -130,20 +131,26 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        if (savedInstanceState != null) {
+            selectedDate = savedInstanceState.getString(KEY_SELECTED_DATE);
+        } else {
+            selectedDate = getCurrentDate();
+        }
+
+        tvSelectedDate.setText(selectedDate);
         retrieveUserData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        String currentDate = tvSelectedDate.getText().toString();
-        retrieveUserDataForDate(currentDate);
+        retrieveUserDataForDate(selectedDate);
     }
 
     private void showDatePickerDialog() {
         final Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-            String selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, dayOfMonth);
+            selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, dayOfMonth);
             tvSelectedDate.setText(selectedDate);
             retrieveUserDataForDate(selectedDate);
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -169,9 +176,7 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
                 vitaminDGoal = (float) currentUser.getVitaminDGoal();
                 vitaminEGoal = (float) currentUser.getVitaminEGoal();
 
-                String currentDate = getCurrentDate();
-                tvSelectedDate.setText(currentDate);
-                retrieveUserDataForDate(currentDate);
+                retrieveUserDataForDate(selectedDate);
             } else {
                 Toast.makeText(this, "Failed to retrieve user data", Toast.LENGTH_LONG).show();
             }
@@ -211,7 +216,6 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         });
     }
 
-
     private void setupSmartTable(List<Meal> meals) {
         if (meals.isEmpty()) {
             // Clear the table if no meals are available
@@ -240,11 +244,7 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         smartTable.setTableData(tableData);
     }
 
-
-
-
-
-    private void setupPieChart(PieChart pieChart, TextView textView, float currentValue, float goalValue) {
+    private void setupPieChart(PieChart pieChart, TextView textView, float currentValue, float goalValue, String unit) {
         List<PieEntry> entries = new ArrayList<>();
         float percentage;
         if (currentValue >= goalValue) {
@@ -278,17 +278,14 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
 
         pieChart.invalidate(); // refresh
 
-        textView.setText(String.format("%.1f / %.1f", currentValue, goalValue));
+        textView.setText(String.format("%.1f %s / %.1f %s", currentValue, unit, goalValue, unit));
     }
 
-
-
-    private void setupCalorieProgressBar(ProgressBar progressBar, TextView textView, float currentValue, float goalValue) {
+    private void setupCalorieProgressBar(ProgressBar progressBar, TextView textView, float currentValue, float goalValue, String unit) {
         int progress = (int) ((currentValue / goalValue) * 100);
         progressBar.setProgress(progress);
-        textView.setText(String.format("%.1f / %.1f", currentValue, goalValue));
+        textView.setText(String.format("%.1f %s / %.1f %s", currentValue, unit, goalValue, unit));
     }
-
 
     private void updateNutrientData(DataSnapshot dataSnapshot) {
         float currentCarbs = getFloatValue(dataSnapshot, "currentCarbs");
@@ -305,45 +302,59 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         float currentVitaminD = getFloatValue(dataSnapshot, "currentVitaminD");
         float currentVitaminE = getFloatValue(dataSnapshot, "currentVitaminE");
 
-        setupPieChart(carbsPieChart, carbsValueText, currentCarbs, carbsGoal);
-        setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal);
-        setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal);
-        setupPieChart(sodiumPieChart, sodiumValueText, currentSodium, sodiumGoal);
-        setupPieChart(potassiumPieChart, potassiumValueText, currentPotassium, potassiumGoal);
-        setupPieChart(calciumPieChart, calciumValueText, currentCalcium, calciumGoal);
-        setupPieChart(ironPieChart, ironValueText, currentIron, ironGoal);
-        setupPieChart(vitaminAPieChart, vitaminAValueText, currentVitaminA, vitaminAGoal);
-        setupPieChart(vitaminBPieChart, vitaminBValueText, currentVitaminB, vitaminBGoal);
-        setupPieChart(vitaminCPieChart, vitaminCValueText, currentVitaminC, vitaminCGoal);
-        setupPieChart(vitaminDPieChart, vitaminDValueText, currentVitaminD, vitaminDGoal);
-        setupPieChart(vitaminEPieChart, vitaminEValueText, currentVitaminE, vitaminEGoal);
-        setupCalorieProgressBar(calorieProgressBar, caloriesValueText, currentCalories, caloriesGoal);
+        setupPieChart(carbsPieChart, carbsValueText, currentCarbs, carbsGoal, "g");
+        setupPieChart(fatPieChart, fatValueText, currentFat, fatGoal, "g");
+        setupPieChart(proteinPieChart, proteinValueText, currentProtein, proteinGoal, "g");
+        setupPieChart(sodiumPieChart, sodiumValueText, currentSodium, sodiumGoal, "mg");
+        setupPieChart(potassiumPieChart, potassiumValueText, currentPotassium, potassiumGoal, "mg");
+        setupPieChart(calciumPieChart, calciumValueText, currentCalcium, calciumGoal, "mg");
+        setupPieChart(ironPieChart, ironValueText, currentIron, ironGoal, "mg");
+        setupPieChart(vitaminAPieChart, vitaminAValueText, currentVitaminA, vitaminAGoal, "IU");
+        setupPieChart(vitaminBPieChart, vitaminBValueText, currentVitaminB, vitaminBGoal, "mg");
+        setupPieChart(vitaminCPieChart, vitaminCValueText, currentVitaminC, vitaminCGoal, "mg");
+        setupPieChart(vitaminDPieChart, vitaminDValueText, currentVitaminD, vitaminDGoal, "IU");
+        setupPieChart(vitaminEPieChart, vitaminEValueText, currentVitaminE, vitaminEGoal, "mg");
+        setupCalorieProgressBar(calorieProgressBar, caloriesValueText, currentCalories, caloriesGoal, "kcal");
     }
 
-
     private void resetNutrientData() {
-        setupPieChart(carbsPieChart, carbsValueText, 0, carbsGoal);
-        setupPieChart(fatPieChart, fatValueText, 0, fatGoal);
-        setupPieChart(proteinPieChart, proteinValueText, 0, proteinGoal);
-        setupPieChart(sodiumPieChart, sodiumValueText, 0, sodiumGoal);
-        setupPieChart(potassiumPieChart, potassiumValueText, 0, potassiumGoal);
-        setupPieChart(calciumPieChart, calciumValueText, 0, calciumGoal);
-        setupPieChart(ironPieChart, ironValueText, 0, ironGoal);
-        setupPieChart(vitaminAPieChart, vitaminAValueText, 0, vitaminAGoal);
-        setupPieChart(vitaminBPieChart, vitaminBValueText, 0, vitaminBGoal);
-        setupPieChart(vitaminCPieChart, vitaminCValueText, 0, vitaminCGoal);
-        setupPieChart(vitaminDPieChart, vitaminDValueText, 0, vitaminDGoal);
-        setupPieChart(vitaminEPieChart, vitaminEValueText, 0, vitaminEGoal);
-        setupCalorieProgressBar(calorieProgressBar, caloriesValueText, 0, caloriesGoal);
+        setupPieChart(carbsPieChart, carbsValueText, 0, carbsGoal, "g");
+        setupPieChart(fatPieChart, fatValueText, 0, fatGoal, "g");
+        setupPieChart(proteinPieChart, proteinValueText, 0, proteinGoal, "g");
+        setupPieChart(sodiumPieChart, sodiumValueText, 0, sodiumGoal, "mg");
+        setupPieChart(potassiumPieChart, potassiumValueText, 0, potassiumGoal, "mg");
+        setupPieChart(calciumPieChart, calciumValueText, 0, calciumGoal, "mg");
+        setupPieChart(ironPieChart, ironValueText, 0, ironGoal, "mg");
+        setupPieChart(vitaminAPieChart, vitaminAValueText, 0, vitaminAGoal, "IU");
+        setupPieChart(vitaminBPieChart, vitaminBValueText, 0, vitaminBGoal, "mg");
+        setupPieChart(vitaminCPieChart, vitaminCValueText, 0, vitaminCGoal, "mg");
+        setupPieChart(vitaminDPieChart, vitaminDValueText, 0, vitaminDGoal, "IU");
+        setupPieChart(vitaminEPieChart, vitaminEValueText, 0, vitaminEGoal, "mg");
+        setupCalorieProgressBar(calorieProgressBar, caloriesValueText, 0, caloriesGoal, "kcal");
     }
 
     private float getFloatValue(DataSnapshot dataSnapshot, String key) {
         return dataSnapshot.child(key).getValue(Float.class) != null ? dataSnapshot.child(key).getValue(Float.class) : 0;
     }
 
-
     private String getCurrentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         return sdf.format(new Date());
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_SELECTED_DATE, selectedDate);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            selectedDate = savedInstanceState.getString(KEY_SELECTED_DATE);
+            tvSelectedDate.setText(selectedDate);
+            retrieveUserDataForDate(selectedDate);
+        }
     }
 }
