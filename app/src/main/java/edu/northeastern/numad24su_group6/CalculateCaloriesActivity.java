@@ -243,14 +243,27 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
 
     private void setupPieChart(PieChart pieChart, TextView textView, float currentValue, float goalValue) {
         List<PieEntry> entries = new ArrayList<>();
-        float percentage = (currentValue / goalValue) * 100;
-        entries.add(new PieEntry(percentage));
-        entries.add(new PieEntry(100 - percentage));
+        float percentage;
+        if (currentValue >= goalValue) {
+            percentage = 100; // Fill the pie chart if the goal is exceeded
+            entries.add(new PieEntry(percentage));
+            entries.add(new PieEntry(0)); // No remaining part
+        } else {
+            percentage = (currentValue / goalValue) * 100;
+            entries.add(new PieEntry(percentage));
+            entries.add(new PieEntry(100 - percentage));
+        }
 
         PieDataSet dataSet = new PieDataSet(entries, "");
+
         List<Integer> colors = new ArrayList<>();
-        colors.add(ColorTemplate.COLORFUL_COLORS[3]); // Consumed part color
-        colors.add(android.graphics.Color.WHITE); // Remaining part color
+        if (currentValue >= goalValue) {
+            colors.add(ColorTemplate.COLORFUL_COLORS[2]); // Color for exceeding goal
+            colors.add(android.graphics.Color.LTGRAY); // Color for remaining part, which is not displayed
+        } else {
+            colors.add(ColorTemplate.COLORFUL_COLORS[3]); // Consumed part color
+            colors.add(android.graphics.Color.LTGRAY); // Remaining part color
+        }
         dataSet.setColors(colors);
         dataSet.setDrawValues(false); // Disable slice labels
 
@@ -264,6 +277,8 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
 
         textView.setText(String.format("%.1f / %.1f", currentValue, goalValue));
     }
+
+
 
     private void setupCalorieProgressBar(ProgressBar progressBar, TextView textView, float currentValue, float goalValue) {
         int progress = (int) ((currentValue / goalValue) * 100);
