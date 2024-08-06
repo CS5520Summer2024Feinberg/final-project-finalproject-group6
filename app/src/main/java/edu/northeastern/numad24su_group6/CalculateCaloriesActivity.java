@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,10 +66,12 @@ public class CalculateCaloriesActivity extends AppCompatActivity {
         smartTable = findViewById(R.id.smartTable);
 
         findViewById(R.id.sharedImage).setOnClickListener(view -> {
-            Bitmap screenshot = ScreenshotUtils.getInstance().takeScreenshot(CalculateCaloriesActivity.this);
+            ScrollView scrollView = findViewById(R.id.scrollView);
+            Bitmap screenshot = ScreenshotUtils.getInstance().takeScreenshotOfScrollView(scrollView);
             Uri screenshotUri = ScreenshotUtils.getInstance().saveScreenshot(CalculateCaloriesActivity.this, screenshot);
             ScreenshotUtils.getInstance().shareScreenshot(CalculateCaloriesActivity.this, screenshotUri);
         });
+
 
         userId = getIntent().getStringExtra("userId");
 

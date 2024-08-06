@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.View;
+import android.widget.ScrollView;
+import android.webkit.WebView;
 
 import androidx.core.content.FileProvider;
 
@@ -38,6 +41,36 @@ public class ScreenshotUtils {
         rootView.setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(rootView.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
+        return bitmap;
+    }
+
+    public Bitmap takeScreenshotOfScrollView(ScrollView scrollView) {
+        // Measure the full content size
+        int totalHeight = 0;
+        int totalWidth = scrollView.getChildAt(0).getWidth();
+        for (int i = 0; i < scrollView.getChildCount(); i++) {
+            totalHeight += scrollView.getChildAt(i).getHeight();
+        }
+
+        // Create a bitmap with the full content size
+        Bitmap bitmap = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        scrollView.draw(canvas);
+
+        return bitmap;
+    }
+
+    public Bitmap takeScreenshotOfWebView(WebView webView) {
+        // Ensure the WebView content is fully loaded
+        webView.measure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        webView.layout(0, 0, webView.getMeasuredWidth(), webView.getMeasuredHeight());
+
+        // Create a bitmap with the full content size
+        Bitmap bitmap = Bitmap.createBitmap(webView.getMeasuredWidth(), webView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        webView.draw(canvas);
+
         return bitmap;
     }
 
