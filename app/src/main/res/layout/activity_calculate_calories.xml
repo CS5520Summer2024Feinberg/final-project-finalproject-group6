@@ -35,9 +35,8 @@
                 android:id="@+id/sharedImage"
                 android:layout_marginTop="10dp"
                 android:layout_width="30dp"
-                android:src="@drawable/share_png"
-                android:layout_height="30dp"/>
-
+                android:layout_height="30dp"
+                android:src="@drawable/share_png"/>
         </LinearLayout>
 
         <LinearLayout
@@ -513,15 +512,11 @@
         </LinearLayout>
 
         <!-- Header Layout -->
-        <include
-            layout="@layout/meal_table_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mealPlannerRecyclerView"
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/smartTable"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_marginTop="16dp" />
 
         <Button
@@ -530,7 +525,7 @@
             android:layout_height="wrap_content"
             android:text="Add Food"
             android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:layout_gravity="center"/>
 
         <!-- Back Button -->

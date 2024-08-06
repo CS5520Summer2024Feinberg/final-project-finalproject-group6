@@ -47,7 +47,7 @@ public class SearchFoodActivity extends AppCompatActivity {
     private final String APP_ID = "05e52e64";
 
     private static final Map<String, Integer> NUTRIENT_NAME_TO_ATTR_ID = new HashMap<String, Integer>() {{
-        put("Energy (kcal)", 208);
+        put("Energy (Cal)", 208);
         put("Carbohydrate, by difference (g)", 205);
         put("Total lipid (fat) (g)", 204);
         put("Protein (g)", 203);

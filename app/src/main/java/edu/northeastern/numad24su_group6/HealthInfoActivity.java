@@ -133,6 +133,31 @@ public class HealthInfoActivity extends AppCompatActivity {
         goalSpinner.setAdapter(goalAdapter);
     }
 
+    private void populateUserInfo(User user) {
+        ageEditText.setText(String.valueOf(user.getAge()));
+
+        // Set placeholder text if no data is available
+        if (user.getHeight() > 0) {
+            heightEditText.setText(String.valueOf(user.getHeight()));
+        } else {
+            heightEditText.setText("Height not set");
+        }
+
+        if (user.getWeight() > 0) {
+            weightEditText.setText(String.valueOf(user.getWeight()));
+        } else {
+            weightEditText.setText("Weight not set");
+        }
+
+        if ("Male".equalsIgnoreCase(user.getSex())) {
+            maleRadioButton.setChecked(true);
+        } else if ("Female".equalsIgnoreCase(user.getSex())) {
+            femaleRadioButton.setChecked(true);
+        }
+        activityLevelSpinner.setSelection(user.getActivityLevel() - 1);
+        // Any additional user info population
+    }
+
     private void fetchUserData() {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -156,18 +181,6 @@ public class HealthInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void populateUserInfo(User user) {
-        ageEditText.setText(String.valueOf(user.getAge()));
-        heightEditText.setText(String.valueOf(user.getHeight()));
-        weightEditText.setText(String.valueOf(user.getWeight()));
-        if ("Male".equalsIgnoreCase(user.getSex())) {
-            maleRadioButton.setChecked(true);
-        } else if ("Female".equalsIgnoreCase(user.getSex())) {
-            femaleRadioButton.setChecked(true);
-        }
-        activityLevelSpinner.setSelection(user.getActivityLevel() - 1);
-        // Any additional user info population
-    }
 
     private void calculateCalories() {
         if (!validateInputs()) {

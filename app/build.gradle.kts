@@ -46,6 +46,7 @@ dependencies {
     implementation ("com.google.firebase:firebase-database:20.0.5")
     implementation ("com.google.firebase:firebase-auth:21.0.3")
     implementation ("com.google.firebase:firebase-auth:21.0.1")
+    implementation ("com.github.huangyanbin:SmartTable:2.2.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

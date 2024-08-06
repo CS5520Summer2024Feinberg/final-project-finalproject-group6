@@ -1,22 +1,56 @@
 package edu.northeastern.numad24su_group6.model;
 
+import com.bin.david.form.annotation.SmartColumn;
+import com.bin.david.form.annotation.SmartTable;
+
+@SmartTable(name="Meal Plan")
 public class Meal {
+    @SmartColumn(id = 0, name = "Food Name")
     private String foodName;
+
+    @SmartColumn(id = 1, name = "Carbs")
     private float carbs;
+
+    @SmartColumn(id = 2, name = "Fats")
     private float fats;
+
+    @SmartColumn(id = 3, name = "Proteins")
     private float proteins;
+
+    @SmartColumn(id = 4, name = "Calories")
     private float calories;
+
+    @SmartColumn(id = 5, name = "Amount")
     private int amount;
+
+    @SmartColumn(id = 6, name = "Sodium")
     private float sodium;
+
+    @SmartColumn(id = 7, name = "Potassium")
     private float potassium;
+
+    @SmartColumn(id = 8, name = "Calcium")
     private float calcium;
+
+    @SmartColumn(id = 9, name = "Iron")
     private float iron;
+
+    @SmartColumn(id = 10, name = "Vitamin A")
     private float vitaminA;
+
+    @SmartColumn(id = 11, name = "Vitamin B")
     private float vitaminB;
+
+    @SmartColumn(id = 12, name = "Vitamin C")
     private float vitaminC;
+
+    @SmartColumn(id = 13, name = "Vitamin D")
     private float vitaminD;
+
+    @SmartColumn(id = 14, name = "Vitamin E")
     private float vitaminE;
 
+    // Constructors, getters and setters
     public Meal() {
     }
 

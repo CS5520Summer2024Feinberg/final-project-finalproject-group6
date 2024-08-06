@@ -88,16 +88,32 @@ public class CreateUserActivity extends AppCompatActivity {
                                         userUpdates.put("email", email);
                                         userUpdates.put("age", age);
                                         userUpdates.put("gender", gender);
-                                        userUpdates.put("carbsGoal", 200f); // Example initial values
+                                        userUpdates.put("carbsGoal", 300f); // Example initial values
                                         userUpdates.put("currentCarbs", 0f);
                                         userUpdates.put("fatGoal", 70f);
                                         userUpdates.put("currentFat", 0f);
-                                        userUpdates.put("proteinGoal", 150f);
+                                        userUpdates.put("proteinGoal", 50f);
                                         userUpdates.put("currentProtein", 0f);
-                                        userUpdates.put("waterGoal", 3000f); // in ml
-                                        userUpdates.put("currentWater", 0f); // in ml
                                         userUpdates.put("caloriesGoal", 2000f);
                                         userUpdates.put("currentCalories", 0f);
+                                        userUpdates.put("sodiumGoal", 2300f);
+                                        userUpdates.put("currentSodium", 0f);
+                                        userUpdates.put("potassiumGoal", 4700f);
+                                        userUpdates.put("currentPotassium", 0f);
+                                        userUpdates.put("calciumGoal", 1000f);
+                                        userUpdates.put("currentCalcium", 0f);
+                                        userUpdates.put("ironGoal", 18f);
+                                        userUpdates.put("currentIron", 0f);
+                                        userUpdates.put("vitaminAGoal", 900f);
+                                        userUpdates.put("currentVitaminA", 0f);
+                                        userUpdates.put("vitaminBGoal", 1.3f);
+                                        userUpdates.put("currentVitaminB", 0f);
+                                        userUpdates.put("vitaminCGoal", 90f);
+                                        userUpdates.put("currentVitaminC", 0f);
+                                        userUpdates.put("vitaminDGoal", 20f);
+                                        userUpdates.put("currentVitaminD", 0f);
+                                        userUpdates.put("vitaminEGoal", 15f);
+                                        userUpdates.put("currentVitaminE", 0f);
                                         userUpdates.put("is_logged_in", true);
 
                                         userRef.updateChildren(userUpdates).addOnCompleteListener(task1 -> {
