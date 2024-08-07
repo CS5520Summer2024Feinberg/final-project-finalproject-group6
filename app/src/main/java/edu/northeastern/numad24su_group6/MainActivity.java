@@ -1,9 +1,10 @@
 package edu.northeastern.numad24su_group6;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +12,10 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,7 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.northeastern.numad24su_group6.utils.Notification;
+import edu.northeastern.numad24su_group6.utils.NotificationScheduler;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnIntroduceApp;
@@ -32,31 +36,21 @@ public class MainActivity extends AppCompatActivity {
     private String userId;
     private FirebaseAuth auth;
 
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
+    private static final int REQUEST_EXACT_ALARM_PERMISSION = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // init notification
-        Notification.getInstance(this);
+        requestNotificationPermission();
+
+        new NotificationScheduler(this);
 
 //        Notification.getInstance(MainActivity.this).testNotification(60, "This is a test notification!");
 
-        auth = FirebaseAuth.getInstance();
 
-        if (auth.getCurrentUser() == null) {
-            // No user is signed in, redirect to LoginActivity
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        } else {
-            // User is signed in, get userId
-            userId = auth.getCurrentUser().getUid();
-        }
-
-        // Initialize Firebase Database reference
-        userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
         // Initialize buttons and other UI elements
         btnIntroduceApp = findViewById(R.id.btnIntroduceApp);
@@ -65,8 +59,7 @@ public class MainActivity extends AppCompatActivity {
         btnHealthInfo = findViewById(R.id.btnHealthInfo);
         userInfo = findViewById(R.id.user_info);
 
-        // Get the stored username and display it
-        fetchUsername();
+
 
         userInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +103,55 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void checkLogin(){
+        Log.e("check__", "start check login " );
+        auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            // No user is signed in, redirect to LoginActivity
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        } else {
+            // User is signed in, get userId
+            userId = auth.getCurrentUser().getUid();
+        }
+
+        // Initialize Firebase Database reference
+        userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
+        // Get the stored username and display it
+        fetchUsername();
+    }
+
+    private void requestNotificationPermission() {
+        Log.e("check__", "requestNotificationPermission: " );
+        if (Build.VERSION.SDK_INT >= 33) {
+            if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
+                    != PackageManager.PERMISSION_GRANTED) {
+                // 请求权限
+                ActivityCompat.requestPermissions(this, new String[]{"android.permission.POST_NOTIFICATIONS"}, REQUEST_NOTIFICATION_PERMISSION);
+            }
+        }
+    }
+
+    private void requestExactAlarmPermission() {
+        Log.e("check__", "requestExactAlarmPermission: " );
+
+            if (ContextCompat.checkSelfPermission(this, "android.permission.SCHEDULE_EXACT_ALARM")
+                    != PackageManager.PERMISSION_GRANTED) {
+                // Request permission
+                Log.e("check__", "no had two: " );
+                ActivityCompat.requestPermissions(this, new String[]{"android.permission.SCHEDULE_EXACT_ALARM"}, REQUEST_EXACT_ALARM_PERMISSION);
+            }else{
+                Log.e("check__", "had two: " );
+                checkLogin();
+            }
+
+    }
+
 
     private void fetchUsername() {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -170,6 +212,35 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.e("check__", "user agree one: " );
+                // Notification permission granted
+                new NotificationScheduler(this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        requestExactAlarmPermission();
+                    }
+                });
+
+            } else {
+                // Handle permission denial
+            }
+        } else if (requestCode == REQUEST_EXACT_ALARM_PERMISSION) {
+            Log.e("check__", "user agree two: " );
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Exact alarm permission granted
+                checkLogin();
+            } else {
+                // Handle permission denial
+            }
+        }
     }
 
     private void logout() {
