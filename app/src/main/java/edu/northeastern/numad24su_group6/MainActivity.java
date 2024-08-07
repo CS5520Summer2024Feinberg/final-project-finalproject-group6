@@ -42,70 +42,68 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        requestNotificationPermission();
+        // Check login before setting the content view
+        checkLogin();
 
-        new NotificationScheduler(this);
+        // Initialize UI components only if the user is logged in
+        if (auth.getCurrentUser() != null) {
+            setContentView(R.layout.activity_main);
 
-//        Notification.getInstance(MainActivity.this).testNotification(60, "This is a test notification!");
+            // Initialize buttons and other UI elements
+            btnIntroduceApp = findViewById(R.id.btnIntroduceApp);
+            btnFoodNutritionInfo = findViewById(R.id.btnFoodNutritionInfo);
+            btnCalculateCalories = findViewById(R.id.btnCalculateCalories);
+            btnHealthInfo = findViewById(R.id.btnHealthInfo);
+            userInfo = findViewById(R.id.user_info);
 
+            userInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopupMenu(v);
+                }
+            });
 
+            btnIntroduceApp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, IntroduceAppActivity.class);
+                    startActivity(intent);
+                }
+            });
 
-        // Initialize buttons and other UI elements
-        btnIntroduceApp = findViewById(R.id.btnIntroduceApp);
-        btnFoodNutritionInfo = findViewById(R.id.btnFoodNutritionInfo);
-        btnCalculateCalories = findViewById(R.id.btnCalculateCalories);
-        btnHealthInfo = findViewById(R.id.btnHealthInfo);
-        userInfo = findViewById(R.id.user_info);
+            btnFoodNutritionInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, SearchFoodActivity.class);
+                    intent.putExtra("userId", userId); // Pass userId to SearchFoodActivity
+                    startActivity(intent);
+                }
+            });
 
+            btnCalculateCalories.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, CalculateCaloriesActivity.class);
+                    intent.putExtra("userId", userId); // Pass userId to CalculateCaloriesActivity
+                    startActivity(intent);
+                }
+            });
 
+            btnHealthInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, HealthInfoActivity.class);
+                    intent.putExtra("userId", userId); // Pass userId to HealthInfoActivity
+                    startActivity(intent);
+                }
+            });
 
-        userInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopupMenu(v);
-            }
-        });
-
-        btnIntroduceApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, IntroduceAppActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnFoodNutritionInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SearchFoodActivity.class);
-                intent.putExtra("userId", userId); // Pass userId to SearchFoodActivity
-                startActivity(intent);
-            }
-        });
-
-        btnCalculateCalories.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CalculateCaloriesActivity.class);
-                intent.putExtra("userId", userId); // Pass userId to CalculateCaloriesActivity
-                startActivity(intent);
-            }
-        });
-
-        btnHealthInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HealthInfoActivity.class);
-                intent.putExtra("userId", userId); // Pass userId to HealthInfoActivity
-                startActivity(intent);
-            }
-        });
+            requestNotificationPermission();
+        }
     }
 
-    private void checkLogin(){
-        Log.e("check__", "start check login " );
+    private void checkLogin() {
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null) {
@@ -113,45 +111,41 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
-            return;
         } else {
             // User is signed in, get userId
             userId = auth.getCurrentUser().getUid();
+
+            // Initialize Firebase Database reference
+            userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+
+            // Get the stored username and display it
+            fetchUsername();
         }
-
-        // Initialize Firebase Database reference
-        userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-
-        // Get the stored username and display it
-        fetchUsername();
     }
 
     private void requestNotificationPermission() {
-        Log.e("check__", "requestNotificationPermission: " );
         if (Build.VERSION.SDK_INT >= 33) {
             if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS")
                     != PackageManager.PERMISSION_GRANTED) {
-                // 请求权限
+                // Request permission
                 ActivityCompat.requestPermissions(this, new String[]{"android.permission.POST_NOTIFICATIONS"}, REQUEST_NOTIFICATION_PERMISSION);
+            } else {
+                requestExactAlarmPermission();
             }
+        } else {
+            requestExactAlarmPermission();
         }
     }
 
     private void requestExactAlarmPermission() {
-        Log.e("check__", "requestExactAlarmPermission: " );
-
-            if (ContextCompat.checkSelfPermission(this, "android.permission.SCHEDULE_EXACT_ALARM")
-                    != PackageManager.PERMISSION_GRANTED) {
-                // Request permission
-                Log.e("check__", "no had two: " );
-                ActivityCompat.requestPermissions(this, new String[]{"android.permission.SCHEDULE_EXACT_ALARM"}, REQUEST_EXACT_ALARM_PERMISSION);
-            }else{
-                Log.e("check__", "had two: " );
-                checkLogin();
-            }
-
+        if (ContextCompat.checkSelfPermission(this, "android.permission.SCHEDULE_EXACT_ALARM")
+                != PackageManager.PERMISSION_GRANTED) {
+            // Request permission
+            ActivityCompat.requestPermissions(this, new String[]{"android.permission.SCHEDULE_EXACT_ALARM"}, REQUEST_EXACT_ALARM_PERMISSION);
+        } else {
+            new NotificationScheduler(this);
+        }
     }
-
 
     private void fetchUsername() {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -181,16 +175,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String email = dataSnapshot.child("email").getValue(String.class);
-                int age = dataSnapshot.child("age").getValue(Integer.class);
+                Integer age = dataSnapshot.child("age").getValue(Integer.class);
                 String gender = dataSnapshot.child("gender").getValue(String.class);
 
                 MenuItem emailItem = popupMenu.getMenu().findItem(R.id.menu_email);
                 MenuItem ageItem = popupMenu.getMenu().findItem(R.id.menu_age);
                 MenuItem genderItem = popupMenu.getMenu().findItem(R.id.menu_gender);
 
-                emailItem.setTitle("Email: " + email);
-                ageItem.setTitle("Age: " + age);
-                genderItem.setTitle("Gender: " + gender);
+                if (email != null) emailItem.setTitle("Email: " + email);
+                if (age != null) ageItem.setTitle("Age: " + age);
+                if (gender != null) genderItem.setTitle("Gender: " + gender);
 
                 popupMenu.show();
             }
@@ -219,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.e("check__", "user agree one: " );
                 // Notification permission granted
                 new NotificationScheduler(this);
                 runOnUiThread(new Runnable() {
@@ -228,15 +221,13 @@ public class MainActivity extends AppCompatActivity {
                         requestExactAlarmPermission();
                     }
                 });
-
             } else {
                 // Handle permission denial
             }
         } else if (requestCode == REQUEST_EXACT_ALARM_PERMISSION) {
-            Log.e("check__", "user agree two: " );
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Exact alarm permission granted
-                checkLogin();
+                new NotificationScheduler(this);
             } else {
                 // Handle permission denial
             }
