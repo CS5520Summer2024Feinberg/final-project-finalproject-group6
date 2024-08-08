@@ -104,13 +104,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Carbs" />
+                            android:text="Carbs"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/carbsValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -136,13 +138,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Fats" />
+                            android:text="Fats"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/fatValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -175,13 +179,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Proteins" />
+                            android:text="Proteins"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/proteinValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -215,13 +221,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sodium" />
+                            android:text="Sodium"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/sodiumValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -247,13 +255,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Potassium" />
+                            android:text="Potassium"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/potassiumValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -286,13 +296,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Calcium" />
+                            android:text="Calcium"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/calciumValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -318,13 +330,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Iron" />
+                            android:text="Iron"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/ironValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -357,13 +371,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vitamin A" />
+                            android:text="Vitamin A"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/vitaminAValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -389,13 +405,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vitamin B" />
+                            android:text="Vitamin B"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/vitaminBValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -428,13 +446,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vitamin C" />
+                            android:text="Vitamin C"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/vitaminCValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -460,13 +480,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vitamin D" />
+                            android:text="Vitamin D"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/vitaminDValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -499,13 +521,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Vitamin E" />
+                            android:text="Vitamin E"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/vitaminEValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0/0" />
+                            android:text="0/0"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
